@@ -1,0 +1,17 @@
+
+.classpath
+.project
+.settings/org.eclipse.jdt.apt.core.prefs
+.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.m2e.core.prefs
+target/classes/fr/dauphine/JavaAvance/Solve/Checker.class
+target/classes/fr/dauphine/JavaAvance/GUI/EasterEgg.class
+target/classes/fr/dauphine/JavaAvance/Components/PieceType.class
+target/classes/fr/dauphine/JavaAvance/Components/Piece.class
+target/classes/fr/dauphine/JavaAvance/Components/Pair.class
+target/classes/fr/dauphine/JavaAvance/Components/Pair.class
+target/classes/fr/dauphine/JavaAvance/Components/Piece.class
+target/classes/fr/dauphine/JavaAvance/Components/PieceType.class
+target/classes/fr/dauphine/JavaAvance/GUI/EasterEgg.class
+target/classes/fr/dauphine/JavaAvance/Solve/Checker.class
+*.class
