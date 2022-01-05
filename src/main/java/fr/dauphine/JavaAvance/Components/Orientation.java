@@ -12,11 +12,17 @@ public enum Orientation {
 	 */
 
 	public static Orientation getOrifromValue(int orientationValue) {
-		return null;
+		return orientationValue == 0 ? NORTH : (
+			orientationValue == 1 ? EAST : (
+				orientationValue == 2 ? SOUTH : (
+					orientationValue == 3 ? WEST : null
+				)
+			)
+		);
 	}
 
 	public Orientation getOrientation(){
-		return null;
+		return this;
 	}
 
 	public int[] getOpposedPieceCoordinates(Piece p) {

@@ -59,6 +59,7 @@ public class Main {
             height = Integer.parseInt(gridformat[1]); 
             if(! cmd.hasOption("o")) throw new ParseException("Missing mandatory --output argument.");
             outputFile = cmd.getOptionValue( "o" );
+            
 
             // generate grid and store it to outputFile...
             //...            

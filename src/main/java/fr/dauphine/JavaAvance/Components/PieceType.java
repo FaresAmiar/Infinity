@@ -1,8 +1,10 @@
 package fr.dauphine.JavaAvance.Components;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 
@@ -15,16 +17,43 @@ public enum PieceType {
 
 
     public static PieceType getTypefromValue(int typeValue) {
-        return null;
+        return typeValue == 0 ? PieceType.VOID : (
+            typeValue == 1 ? PieceType.ONECONN : (
+                typeValue == 2 ? PieceType.BAR : (
+                    typeValue == 3 ? PieceType.TTYPE : (
+                        typeValue == 4 ? PieceType.FOURCONN : (
+                            typeValue == 5 ? PieceType.LTYPE : null
+                        )
+                    )
+                )
+            )
+        );
     }
 
     public int getNbConnectors() {
-        return -1;
+        return this == VOID ? 0 : (
+            this == ONECONN ? 1 : (
+                this == BAR ? 2 : (
+                    this == TTYPE ? 3 : (
+                        this == FOURCONN ? 4 : (
+                            this == LTYPE ? 2 : -1
+                        )
+                    )
+                )
+            )
+        );
+        
     }
 
-    public ArrayList<Orientation> getListOfPossibleOri() {
-        return null;
-    }
+    /*public ArrayList<Orientation> getListOfPossibleOri() {
+        List<Orientation> empty = Arrays.asList();
+        List<Orientation> oneconn = Arrays.asList(Orientation.NORTH, Orientation.EAST, Orientation.SOUTH, Orientation.WEST);
+        List<Orientation> bar = Arrays.asList(Orientation.NORTH, Orientation.EAST);
+        List<Orientation> ttype = Arrays.asList(Orientation.NORTH,)
+        return this == VOID ? empty : (
+            this == ONECONN ? Arrays.asList(Orientation.)
+        )
+    }*/
 
     public Orientation getOrientation(Orientation orientation) {
         return orientation.getOrientation();
