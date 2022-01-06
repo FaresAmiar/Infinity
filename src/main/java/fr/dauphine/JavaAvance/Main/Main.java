@@ -2,6 +2,8 @@ package fr.dauphine.JavaAvance.Main;
 
 import java.io.IOException;
 
+import javax.swing.ImageIcon;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -62,6 +64,7 @@ public class Main {
             
 
             // generate grid and store it to outputFile...
+            
             //...            
         }
         else if( cmd.hasOption( "s" ) ) {
