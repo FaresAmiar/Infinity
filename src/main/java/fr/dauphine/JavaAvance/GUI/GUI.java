@@ -89,8 +89,29 @@ public class GUI {
 	 */
 	private ImageIcon getImageIcon(Piece p) {
 		//To be implemented
+		ImageIcon resultImage = null;
+		PieceType typeOfPiece = p.getType();
+		Orientation orientation = p.getOrientation();
 		
-		return null;
+	
+		switch(typeOfPiece) {
+		
+		case VOID :
+			resultImage = new ImageIcon("");
+		case ONECONN:
+			resultImage = new ImageIcon("/Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/11.png");
+		case BAR:
+			resultImage = new ImageIcon("/Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/11.png");
+		case TTYPE:
+			resultImage = new ImageIcon("/Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/11.png");
+		case FOURCONN:
+			resultImage = new ImageIcon("/Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/11.png");
+		case LTYPE:
+			resultImage = new ImageIcon("/Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/11.png");
+
+		}
+		
+		return resultImage;
 	}
 
 }
