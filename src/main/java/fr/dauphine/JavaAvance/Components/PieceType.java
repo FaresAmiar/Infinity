@@ -2,9 +2,7 @@ package fr.dauphine.JavaAvance.Components;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * 
@@ -32,11 +30,22 @@ public enum PieceType {
     }
 
     public ArrayList<Orientation> getListOfPossibleOri() {
-        List<Orientation> empty = Arrays.asList();
-        List<Orientation> oneconn = Arrays.asList(Orientation.NORTH, Orientation.EAST, Orientation.SOUTH,
-                Orientation.WEST);
-        List<Orientation> bar = Arrays.asList(Orientation.NORTH, Orientation.EAST);
-        return null;
+        ArrayList<Orientation> empty = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH);
+        ArrayList<Orientation> oneconn = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST,
+                Orientation.SOUTH, Orientation.WEST);
+        ArrayList<Orientation> bar = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST);
+        ArrayList<Orientation> ttype = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST,
+                Orientation.SOUTH, Orientation.WEST);
+        ArrayList<Orientation> fourconn = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH);
+        ArrayList<Orientation> ltype = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST,
+                Orientation.SOUTH, Orientation.WEST);
+
+        return this == VOID ? empty
+                : (this == ONECONN ? oneconn
+                        : (this == BAR ? bar
+                                : (this == TTYPE ? ttype
+                                        : (this == FOURCONN ? fourconn : (this == LTYPE ? ltype : null)))));
+
         /*
          * List<Orientation> ttype = Arrays.asList(Orientation.NORTH,) return this ==
          * VOID ? empty : ( this == ONECONN ? Arrays.asList(Orientation.) )
@@ -48,6 +57,22 @@ public enum PieceType {
     }
 
     public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
+        if (this == VOID)
+            return (LinkedList<Orientation>) Arrays.asList(Orientation.NORTH);
+        if (this == ONECONN && orientation == Orientation.NORTH)
+            return (LinkedList<Orientation>) Arrays.asList(Orientation.NORTH);
+        if (this == ONECONN && orientation == Orientation.EAST)
+            return (LinkedList<Orientation>) Arrays.asList(Orientation.EAST);
+        if (this == ONECONN && orientation == Orientation.SOUTH)
+            return (LinkedList<Orientation>) Arrays.asList(Orientation.SOUTH);
+        if (this == ONECONN && orientation == Orientation.WEST)
+            return (LinkedList<Orientation>) Arrays.asList(Orientation.WEST);
+        if (this == BAR && (orientation == Orientation.WEST || orientation == Orientation.EAST))
+            return (LinkedList<Orientation>) Arrays.asList(Orientation.WEST, Orientation.EAST);
+        if (this == BAR && (orientation == Orientation.NORTH || orientation == Orientation.SOUTH))
+            return (LinkedList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.SOUTH);
+        // if(this == TTYPE && ()
+
         return null;
     }
 
