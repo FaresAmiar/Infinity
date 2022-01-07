@@ -30,15 +30,15 @@ public enum PieceType {
     }
 
     public ArrayList<Orientation> getListOfPossibleOri() {
-        ArrayList<Orientation> empty = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH);
-        ArrayList<Orientation> oneconn = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST,
-                Orientation.SOUTH, Orientation.WEST);
-        ArrayList<Orientation> bar = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST);
-        ArrayList<Orientation> ttype = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST,
-                Orientation.SOUTH, Orientation.WEST);
-        ArrayList<Orientation> fourconn = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH);
-        ArrayList<Orientation> ltype = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST,
-                Orientation.SOUTH, Orientation.WEST);
+        ArrayList<Orientation> empty = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH));
+        ArrayList<Orientation> oneconn = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH, Orientation.EAST,
+                Orientation.SOUTH, Orientation.WEST));
+        ArrayList<Orientation> bar = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH, Orientation.EAST));
+        ArrayList<Orientation> ttype = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH, Orientation.EAST,
+                Orientation.SOUTH, Orientation.WEST));
+        ArrayList<Orientation> fourconn = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH));
+        ArrayList<Orientation> ltype = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH, Orientation.EAST,
+                Orientation.SOUTH, Orientation.WEST));
 
         return this == VOID ? empty
                 : (this == ONECONN ? oneconn
