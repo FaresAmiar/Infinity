@@ -3,6 +3,7 @@ package fr.dauphine.JavaAvance.Solve;
 
 import java.util.Random;
 
+import fr.dauphine.JavaAvance.Components.Orientation;
 import fr.dauphine.JavaAvance.Components.Piece;
 import fr.dauphine.JavaAvance.Components.PieceType;
 import fr.dauphine.JavaAvance.GUI.Grid;
@@ -28,7 +29,33 @@ public class Generator {
 	public static void generateLevel(String fileName, Grid inputGrid) {
       
 		// To be implemented
+		
+		
+		System.out.println("Début de la génération de votre niveau");
+		
+		for(int i = 0; i < inputGrid.getHeight(); i++) {
+			for (int j = 0; j < inputGrid.getWidth(); j++) {
+				if(inputGrid.isCorner(i, j)) {
+					System.out.println("Coin "+ i+" "+j);
+
+				}
+				if(inputGrid.isBorderLine(i, j)) {
+					System.out.println("Ligne en haut ou en bas "+ i+" "+j);
+				}
+				if(inputGrid.isBorderColumn(i, j)) {
+					System.out.println("Colonne Gauche ou droite "+ i+" "+j);
+				}
+				else if(!inputGrid.isCorner(i, j) && !inputGrid.isBorderLine(i, j) && !inputGrid.isBorderColumn(i, j)) {
+					System.out.println("Autre cases "+ i+" "+j);
+				}
+			}
+			
+		}
+		
+		System.out.println("Fin de la génération de votre niveau : Bonne chance ");
 	}
+	
+	
 	public static int[] copyGrid(Grid filledGrid, Grid inputGrid, int i, int j) {
 		Piece p;
 		int hmax = inputGrid.getHeight();
@@ -61,4 +88,13 @@ public class Generator {
 		return new int[] { tmpi, tmpj };
 	}
 
+	
+	
+//Implementer par Rayan Test	
+	
+	public static void main (String args[]) {
+		Grid grid = new Grid(5,5);
+		generateLevel("null", grid);
+	}
+//Fin implementation Rayan
 }

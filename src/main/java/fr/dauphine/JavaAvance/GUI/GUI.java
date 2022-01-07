@@ -24,6 +24,7 @@ import fr.dauphine.JavaAvance.Solve.Checker;
  */
 public class GUI {
 
+	
 	private JFrame frame;
 
 	/**
@@ -89,11 +90,11 @@ public class GUI {
 	 */
 	private ImageIcon getImageIcon(Piece p) {
 		//To be implemented
+		//A finir
 		ImageIcon resultImage = null;
 		PieceType typeOfPiece = p.getType();
 		Orientation orientation = p.getOrientation();
 		
-	
 		switch(typeOfPiece) {
 		
 		case VOID :
