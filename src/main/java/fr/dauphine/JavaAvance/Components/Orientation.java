@@ -29,22 +29,22 @@ public enum Orientation {
 		Orientation oppOri = this.getOpposedOrientation();
 
 		switch (oppOri) {
-		case NORTH:
-			coordinates[0] = p.getPosX() - 1;
-			coordinates[1] = p.getPosY();
-			break;
+			case NORTH:
+				coordinates[0] = p.getPosX() - 1;
+				coordinates[1] = p.getPosY();
+				break;
 
-		case EAST:
-			coordinates[0] = p.getPosX();
-			coordinates[1] = p.getPosY() + 1;
-			break;
-		case SOUTH:
-			coordinates[0] = p.getPosX() + 1;
-			coordinates[1] = p.getPosY();
-			break;
-		case WEST:
-			coordinates[0] = p.getPosX();
-			coordinates[1] = p.getPosY() - 1;
+			case EAST:
+				coordinates[0] = p.getPosX();
+				coordinates[1] = p.getPosY() + 1;
+				break;
+			case SOUTH:
+				coordinates[0] = p.getPosX() + 1;
+				coordinates[1] = p.getPosY();
+				break;
+			case WEST:
+				coordinates[0] = p.getPosX();
+				coordinates[1] = p.getPosY() - 1;
 		}
 		return coordinates;
 	}

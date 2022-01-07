@@ -13,6 +13,7 @@ public enum PieceType {
     VOID, ONECONN, BAR, TTYPE, FOURCONN, LTYPE;
     // Each Type has a number of connectors and a specific value
 
+    // f
     public static PieceType getTypefromValue(int typeValue) {
         return typeValue == 0 ? PieceType.VOID
                 : (typeValue == 1 ? PieceType.ONECONN
@@ -22,6 +23,7 @@ public enum PieceType {
                                                 : (typeValue == 5 ? PieceType.LTYPE : null)))));
     }
 
+    // f
     public int getNbConnectors() {
         return this == VOID ? 0
                 : (this == ONECONN ? 1
@@ -29,6 +31,7 @@ public enum PieceType {
 
     }
 
+    // f
     public ArrayList<Orientation> getListOfPossibleOri() {
         ArrayList<Orientation> empty = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH));
         ArrayList<Orientation> oneconn = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH, Orientation.EAST,
@@ -52,10 +55,12 @@ public enum PieceType {
          */
     }
 
+    // f
     public Orientation getOrientation(Orientation orientation) {
         return orientation.getOrientation();
     }
 
+    // f
     public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
         if (this == VOID)
             return new LinkedList<Orientation>(Arrays.asList(Orientation.NORTH));
