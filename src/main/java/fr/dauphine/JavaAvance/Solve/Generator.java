@@ -37,6 +37,11 @@ public class Generator {
 			for (int j = 0; j < inputGrid.getWidth(); j++) {
 				if(inputGrid.isCorner(i, j)) {
 					System.out.println("Coin "+ i+" "+j);
+					Orientation orientation = Orientation.EAST ;
+					PieceType typePiece = PieceType.ONECONN;
+							
+					Piece piece = new Piece(j, j, typePiece, orientation);
+					inputGrid.setPiece(i, j, piece);
 
 				}
 				if(inputGrid.isBorderLine(i, j)) {
