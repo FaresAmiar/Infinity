@@ -77,6 +77,7 @@ public class Generator {
 			return;
 		Piece[][] piecesBefore = inputGrid.getAllPieces();
 		Random rd = new Random();
+		
 
 		List<PieceType> piecesPossibles = inputGrid.piecePossible(i, j);
 		Collections.shuffle(piecesPossibles);
