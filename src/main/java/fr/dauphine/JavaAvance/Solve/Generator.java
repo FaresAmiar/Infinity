@@ -93,6 +93,7 @@ public class Generator {
 		return new int[] { tmpi, tmpj };
 	}
 
+<<<<<<< Updated upstream
 	
 	
 //Implementer par Rayan Test	
@@ -100,6 +101,17 @@ public class Generator {
 	public static void main (String args[]) {
 		Grid grid = new Grid(5,5);
 		generateLevel("null", grid);
+=======
+	// Implementer par Rayan Test
+
+	public static void main(String args[]) {
+		Grid grid = new Grid(5, 5);
+		//generateLevel("null", grid);
+		initGrid(grid);
+		grid.displayGrid();
+		
+		
+>>>>>>> Stashed changes
 	}
 //Fin implementation Rayan
 }
