@@ -123,11 +123,16 @@ public class Generator {
 		return new int[] { tmpi, tmpj };
 	}
 
-	// Implementer par Rayan Test
+
+
 
 	public static void main(String args[]) {
 		Grid grid = new Grid(5, 5);
-		generateLevel("null", grid);
+		//generateLevel("null", grid);
+		initGrid(grid);
+		grid.displayGrid();
+		
+		
 	}
 	// Fin implementation Rayan
 }

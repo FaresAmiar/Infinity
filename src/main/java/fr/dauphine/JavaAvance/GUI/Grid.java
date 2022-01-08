@@ -608,4 +608,17 @@ public class Grid {
 		return s;
 	}
 
+	
+	public void displayGrid(){
+		for(int i = 0; i<this.getHeight(); i++) {
+			System.out.println("");
+			for(int j = 0; j<this.getWidth(); j++) {
+					
+				System.out.print("| "+this.getPiece(i, i).getType()+" |");
+				
+				
+			}
+		}
+		
+	}
 }
