@@ -1,6 +1,8 @@
 package fr.dauphine.JavaAvance.GUI;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import fr.dauphine.JavaAvance.Components.Orientation;
 import fr.dauphine.JavaAvance.Components.Piece;
@@ -67,6 +69,60 @@ public class Grid {
 		return pieces;
 	}
 
+	// f
+	public void adaptOrientation(Piece p) {
+		int i = this.getHeight(), j = this.getWidth();
+
+		// switch (p.getType()) {
+		// case ONECONN:
+		// switch (p.getPosX()) {
+		// case 0:
+		// switch (p.getPosY()) {
+		// case 0:
+		// p.setPossibleOrientations(
+		// ));
+		// case j - 1:
+		// }
+		// }
+		if (p.getType() == PieceType.ONECONN) {
+			if (p.getPosX() == 0) {
+				if (p.getPosY() == 0) {
+					p.setPossibleOrientations(new ArrayList(Arrays.asList(Orientation.EAST, Orientation.SOUTH)));
+					// p.get
+				}
+			}
+		}
+
+	}
+
+	public List<PieceType> getPieceTypeCorner() {
+		return new ArrayList<PieceType>(Arrays.asList(PieceType.ONECONN, PieceType.LTYPE));
+	}
+
+	public List<PieceType> piecePossible(int i, int j) {
+		if (this.isCorner(i, j))
+			return getPieceTypeCorner();
+		else
+			return new ArrayList<PieceType>(
+					Arrays.asList(PieceType.ONECONN, PieceType.LTYPE, PieceType.BAR, PieceType.FOURCONN,
+							PieceType.TTYPE));
+
+		// if (this.isCorner(i, j) && !this.hasNeighbour(this.getPiece(i, j))) {
+		// if (i == 0 && j == 0) {
+		// return
+		// }
+		// }
+	}
+
+	// f
+	public int getNumPieces() {
+		return pieces.length * pieces[0].length;
+	}
+
+	public void adaptConnector(Piece p) {
+
+	}
+
 	/**
 	 * Check if a case is a corner
 	 * 
@@ -130,7 +186,7 @@ public class Grid {
 	 * Check if a piece has a neighbour for its connectors for one orientation
 	 * 
 	 * @param p
-	 *            piece
+	 *          piece
 	 * @return true if there is a neighbour for all connectors
 	 */
 	public boolean hasNeighbour(Piece p) {
@@ -154,7 +210,7 @@ public class Grid {
 	 * Check if a piece has a fixed neighbor for each one of its connecotrs
 	 * 
 	 * @param p
-	 *            the piece
+	 *          the piece
 	 * @return true if there is a fixed piece for each connector
 	 */
 	public boolean hasFixedNeighbour(Piece p) {
@@ -190,7 +246,7 @@ public class Grid {
 	 * Check if a piece has a at least one fixed neighbor
 	 * 
 	 * @param p
-	 *            the piece
+	 *          the piece
 	 * @return true if there is a fixed piece for each connector
 	 */
 	public boolean hasAtLeast1FixedNeighbour(Piece p) {
@@ -217,7 +273,7 @@ public class Grid {
 	 * list of neighbors
 	 * 
 	 * @param p
-	 *            the piece
+	 *          the piece
 	 * @return the list of neighbors
 	 */
 	public ArrayList<Piece> listOfNeighbours(Piece p) {
@@ -306,7 +362,7 @@ public class Grid {
 	 * Return the next piece of the current piece
 	 * 
 	 * @param p
-	 *            the current piece
+	 *          the current piece
 	 * @return the piece or null if p is the last piece
 	 */
 	public Piece getNextPiece(Piece p) {
@@ -324,12 +380,12 @@ public class Grid {
 		}
 		return p;
 	}
-	
+
 	/**
 	 * Return the next piece of the current piece right2left and bottom2top
 	 * 
 	 * @param p
-	 *            the current piece
+	 *          the current piece
 	 * @return the piece or null if p is the last piece
 	 */
 	public Piece getNextPieceInv(Piece p) {
@@ -340,7 +396,7 @@ public class Grid {
 			p = this.getPiece(i, j - 1);
 		} else {
 			if (i > 0) {
-				p = this.getPiece(i - 1, this.getWidth()-1);
+				p = this.getPiece(i - 1, this.getWidth() - 1);
 			} else {
 				return null;
 			}

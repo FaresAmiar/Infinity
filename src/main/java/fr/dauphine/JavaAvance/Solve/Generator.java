@@ -1,7 +1,9 @@
 package fr.dauphine.JavaAvance.Solve;
 
-
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import fr.dauphine.JavaAvance.Components.Orientation;
 import fr.dauphine.JavaAvance.Components.Piece;
@@ -19,48 +21,76 @@ public class Generator {
 
 	/**
 	 * @param output
-	 *            file name
+	 *               file name
 	 * @throws IOException
-	 *             - if an I/O error occurs.
+	 *                     - if an I/O error occurs.
 	 * @return a File that contains a grid filled with pieces (a level)
 	 * @throws FileNotFoundException
 	 * @throws UnsupportedEncodingException
 	 */
 	public static void generateLevel(String fileName, Grid inputGrid) {
-      
+
 		// To be implemented
-		
-		
+
 		System.out.println("Début de la génération de votre niveau");
-		
-		for(int i = 0; i < inputGrid.getHeight(); i++) {
+
+		for (int i = 0; i < inputGrid.getHeight(); i++) {
 			for (int j = 0; j < inputGrid.getWidth(); j++) {
-				if(inputGrid.isCorner(i, j)) {
-					System.out.println("Coin "+ i+" "+j);
-					Orientation orientation = Orientation.EAST ;
+				if (inputGrid.isCorner(i, j)) {
+					System.out.println("Coin " + i + " " + j);
+					Orientation orientation = Orientation.EAST;
 					PieceType typePiece = PieceType.ONECONN;
-							
+
 					Piece piece = new Piece(j, j, typePiece, orientation);
 					inputGrid.setPiece(i, j, piece);
 
 				}
-				if(inputGrid.isBorderLine(i, j)) {
-					System.out.println("Ligne en haut ou en bas "+ i+" "+j);
+				if (inputGrid.isBorderLine(i, j)) {
+					System.out.println("Ligne en haut ou en bas " + i + " " + j);
 				}
-				if(inputGrid.isBorderColumn(i, j)) {
-					System.out.println("Colonne Gauche ou droite "+ i+" "+j);
-				}
-				else if(!inputGrid.isCorner(i, j) && !inputGrid.isBorderLine(i, j) && !inputGrid.isBorderColumn(i, j)) {
-					System.out.println("Autre cases "+ i+" "+j);
+				if (inputGrid.isBorderColumn(i, j)) {
+					System.out.println("Colonne Gauche ou droite " + i + " " + j);
+				} else if (!inputGrid.isCorner(i, j) && !inputGrid.isBorderLine(i, j)
+						&& !inputGrid.isBorderColumn(i, j)) {
+					System.out.println("Autre cases " + i + " " + j);
 				}
 			}
-			
+
 		}
-		
+
 		System.out.println("Fin de la génération de votre niveau : Bonne chance ");
 	}
-	
-	
+
+	// implementation fares
+
+	public static void initGrid(Grid grid) {
+		for (int i = 0; i < grid.getHeight(); ++i) {
+			for (int j = 0; j < grid.getWidth(); ++j) {
+				grid.setPiece(i, j, new Piece(i, j));
+			}
+		}
+	}
+
+	public static void recursiveConstruct(Grid inputGrid, int i, int j) {
+		Piece p = new Piece(i, j);
+		if (inputGrid.allPieceHaveNeighbour())
+			return;
+		Piece[][] piecesBefore = inputGrid.getAllPieces();
+		Random rd = new Random();
+		
+
+		List<PieceType> piecesPossibles = inputGrid.piecePossible(i, j);
+		Collections.shuffle(piecesPossibles);
+		PieceType pType = piecesPossibles.get(0);
+
+		if (inputGrid.getNumPieces() == 0) {
+			inputGrid.setPiece(i, j, p);
+		}
+
+	}
+
+	// fin implementation fares
+
 	public static int[] copyGrid(Grid filledGrid, Grid inputGrid, int i, int j) {
 		Piece p;
 		int hmax = inputGrid.getHeight();
@@ -89,20 +119,12 @@ public class Generator {
 			}
 			tmpi = x;
 		}
-		//DEBUGSystem.out.println("tmpi =" + tmpi + " & tmpj = " + tmpj);
+		// DEBUGSystem.out.println("tmpi =" + tmpi + " & tmpj = " + tmpj);
 		return new int[] { tmpi, tmpj };
 	}
 
-<<<<<<< Updated upstream
-	
-	
-//Implementer par Rayan Test	
-	
-	public static void main (String args[]) {
-		Grid grid = new Grid(5,5);
-		generateLevel("null", grid);
-=======
-	// Implementer par Rayan Test
+
+
 
 	public static void main(String args[]) {
 		Grid grid = new Grid(5, 5);
@@ -111,7 +133,6 @@ public class Generator {
 		grid.displayGrid();
 		
 		
->>>>>>> Stashed changes
 	}
-//Fin implementation Rayan
+	// Fin implementation Rayan
 }

@@ -13,6 +13,7 @@ public enum PieceType {
     VOID, ONECONN, BAR, TTYPE, FOURCONN, LTYPE;
     // Each Type has a number of connectors and a specific value
 
+    // f
     public static PieceType getTypefromValue(int typeValue) {
         return typeValue == 0 ? PieceType.VOID
                 : (typeValue == 1 ? PieceType.ONECONN
@@ -22,6 +23,7 @@ public enum PieceType {
                                                 : (typeValue == 5 ? PieceType.LTYPE : null)))));
     }
 
+    // f
     public int getNbConnectors() {
         return this == VOID ? 0
                 : (this == ONECONN ? 1
@@ -29,16 +31,17 @@ public enum PieceType {
 
     }
 
+    // f
     public ArrayList<Orientation> getListOfPossibleOri() {
-        ArrayList<Orientation> empty = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH);
-        ArrayList<Orientation> oneconn = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST,
-                Orientation.SOUTH, Orientation.WEST);
-        ArrayList<Orientation> bar = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST);
-        ArrayList<Orientation> ttype = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST,
-                Orientation.SOUTH, Orientation.WEST);
-        ArrayList<Orientation> fourconn = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH);
-        ArrayList<Orientation> ltype = (ArrayList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST,
-                Orientation.SOUTH, Orientation.WEST);
+        ArrayList<Orientation> empty = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH));
+        ArrayList<Orientation> oneconn = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH, Orientation.EAST,
+                Orientation.SOUTH, Orientation.WEST));
+        ArrayList<Orientation> bar = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH, Orientation.EAST));
+        ArrayList<Orientation> ttype = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH, Orientation.EAST,
+                Orientation.SOUTH, Orientation.WEST));
+        ArrayList<Orientation> fourconn = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH));
+        ArrayList<Orientation> ltype = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH, Orientation.EAST,
+                Orientation.SOUTH, Orientation.WEST));
 
         return this == VOID ? empty
                 : (this == ONECONN ? oneconn
@@ -52,53 +55,55 @@ public enum PieceType {
          */
     }
 
+    // f
     public Orientation getOrientation(Orientation orientation) {
         return orientation.getOrientation();
     }
 
+    // f
     public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
         if (this == VOID)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.NORTH);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.NORTH));
 
         // oneconn
         if (this == ONECONN && orientation == Orientation.NORTH)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.NORTH);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.NORTH));
         if (this == ONECONN && orientation == Orientation.EAST)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.EAST);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.EAST));
         if (this == ONECONN && orientation == Orientation.SOUTH)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.SOUTH);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.SOUTH));
         if (this == ONECONN && orientation == Orientation.WEST)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.WEST);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.WEST));
 
         // bar
         if (this == BAR && (orientation == Orientation.WEST || orientation == Orientation.EAST))
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.WEST, Orientation.EAST);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.WEST, Orientation.EAST));
         if (this == BAR && (orientation == Orientation.NORTH || orientation == Orientation.SOUTH))
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.SOUTH);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.NORTH, Orientation.SOUTH));
 
         // ttype
         if (this == TTYPE && orientation == Orientation.NORTH)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST, Orientation.WEST);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.NORTH, Orientation.EAST, Orientation.WEST));
         if (this == TTYPE && orientation == Orientation.EAST)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.EAST, Orientation.NORTH, Orientation.SOUTH);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.EAST, Orientation.NORTH, Orientation.SOUTH));
         if (this == TTYPE && orientation == Orientation.SOUTH)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.SOUTH, Orientation.WEST, Orientation.EAST);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.SOUTH, Orientation.WEST, Orientation.EAST));
         if (this == TTYPE && orientation == Orientation.WEST)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.WEST, Orientation.NORTH, Orientation.SOUTH);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.WEST, Orientation.NORTH, Orientation.SOUTH));
 
         // fourconn
         if (this == FOURCONN)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.NORTH);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.NORTH));
 
         // ltype
         if (this == LTYPE && orientation == Orientation.NORTH)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.EAST, Orientation.SOUTH);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.EAST, Orientation.SOUTH));
         if (this == LTYPE && orientation == Orientation.EAST)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.SOUTH, Orientation.WEST);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.SOUTH, Orientation.WEST));
         if (this == LTYPE && orientation == Orientation.SOUTH)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.WEST, Orientation.NORTH);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.WEST, Orientation.NORTH));
         if (this == LTYPE && orientation == Orientation.WEST)
-            return (LinkedList<Orientation>) Arrays.asList(Orientation.NORTH, Orientation.EAST);
+            return new LinkedList<Orientation>(Arrays.asList(Orientation.NORTH, Orientation.EAST));
 
         return null;
     }
