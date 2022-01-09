@@ -31,7 +31,6 @@ public class Main {
 	private static Integer algo = 2;
 	
 	public static void main(String[] args) {
-		
 		Options options = new Options();
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
@@ -99,9 +98,7 @@ public class Main {
             formatter.printHelp( "phineloopgen", options );         
             System.exit(1); // exit with error      
     }
-        System.exit(0); 
-        
-        // exit with success                            
+        System.exit(0); // exit with success                            
     }
 	
 }
