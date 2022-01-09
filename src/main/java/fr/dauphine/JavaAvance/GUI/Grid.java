@@ -119,10 +119,6 @@ public class Grid {
 		return pieces.length * pieces[0].length;
 	}
 
-	public void adaptConnector(Piece p) {
-
-	}
-
 	/**
 	 * Check if a case is a corner
 	 * 
@@ -334,6 +330,15 @@ public class Grid {
 			count++;
 		return count;
 	}
+
+	//f
+	public boolean allPiecesAreFixed() {
+		for(Piece[] ligne : this.getAllPieces())
+			for(Piece p : ligne)
+				if(!this.hasFixedNeighbour(p))
+					return false;
+		return true;
+	} 
 
 	/**
 	 * Check if all pieces have neighbors even if we don't know the orientation

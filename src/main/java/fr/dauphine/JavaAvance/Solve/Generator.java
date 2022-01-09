@@ -73,7 +73,7 @@ public class Generator {
 
 	public static void recursiveConstruct(Grid inputGrid, int i, int j) {
 		Piece p = new Piece(i, j);
-		if (inputGrid.allPieceHaveNeighbour())
+		if (inputGrid.allPiecesAreFixed())
 			return;
 		Piece[][] piecesBefore = inputGrid.getAllPieces();
 		Random rd = new Random();
@@ -82,10 +82,18 @@ public class Generator {
 		List<PieceType> piecesPossibles = inputGrid.piecePossible(i, j);
 		Collections.shuffle(piecesPossibles);
 		PieceType pType = piecesPossibles.get(0);
+		p.setType(pType);
 
-		if (inputGrid.getNumPieces() == 0) {
-			inputGrid.setPiece(i, j, p);
+		inputGrid.setPiece(i, j, p);
+
+		while(true) {
+			if(inputGrid.isValidOrientation(i, j))
+				break;
+			p.turn();
 		}
+		
+
+
 
 	}
 

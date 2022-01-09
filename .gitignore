@@ -16,3 +16,4 @@ target/classes/fr/dauphine/JavaAvance/GUI/EasterEgg.class
 target/classes/fr/dauphine/JavaAvance/Solve/Checker.class
 *.class
 /target/
+*.class
