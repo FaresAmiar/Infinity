@@ -99,7 +99,7 @@ public class GUI {
 				for (int j = 0; j < grid.getWidth(); j++) {
 					String pieceType = grid.getPiece(i, j).getType().toString();
 					JButton btn_i = new JButton(pieceType);
-					btn_i.setIcon(new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/1.png"));
+					//btn_i.setIcon(new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/1.png"));
 					this.frame.add(btn_i);
 
 				}
@@ -133,27 +133,68 @@ public class GUI {
 		PieceType typeOfPiece = p.getType();
 		Orientation orientation = p.getOrientation();
 		
-		if(typeOfPiece.toString() == "VOID") {
-			
+		
+		if(typeOfPiece == PieceType.ONECONN) {
+			if(orientation == Orientation.NORTH) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/1.png");				
+			}
+			if(orientation == Orientation.EAST) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/2.png");				
+			}
+			if(orientation == Orientation.SOUTH) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/3.png");				
+			}
+			if(orientation == Orientation.WEST) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/4.png");				
+			}
 		}
 		
-		switch(typeOfPiece) {
+		if(typeOfPiece == PieceType.BAR) {
+			if(orientation == Orientation.NORTH && orientation == Orientation.SOUTH ) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/5.png");
+			}
+			if(orientation == Orientation.EAST && orientation == Orientation.WEST) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/6.png");				
+			}
+		}
 		
-		case VOID :
-			resultImage = new ImageIcon("/Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/background.png");
-		case ONECONN:
-			resultImage = new ImageIcon("/Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/11.png");
-		case BAR:
-			resultImage = new ImageIcon("/Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/11.png");
-		case TTYPE:
-			resultImage = new ImageIcon("/Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/11.png");
-		case FOURCONN:
-			resultImage = new ImageIcon("/Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/11.png");
-		case LTYPE:
-			resultImage = new ImageIcon("/Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/11.png");
+		if(typeOfPiece == PieceType.TTYPE) {
+			if(orientation == Orientation.NORTH && orientation == Orientation.EAST && orientation == Orientation.WEST ) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/7.png");
+			}
+			if(orientation == Orientation.NORTH && orientation == Orientation.EAST && orientation == Orientation.SOUTH ) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/8.png");
+			}
+			if(orientation == Orientation.SOUTH && orientation == Orientation.EAST && orientation == Orientation.WEST ) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/9.png");
+			}
+			if(orientation == Orientation.NORTH && orientation == Orientation.SOUTH && orientation == Orientation.WEST ) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/10.png");
+			}
+		}
+		
+		if(typeOfPiece == PieceType.FOURCONN) {
+			resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/11.png");
+		}
+		
+		
+		if(typeOfPiece == PieceType.LTYPE) {
+			if(orientation == Orientation.NORTH && orientation == Orientation.EAST) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/12.png");
+			}
+			if(orientation == Orientation.SOUTH && orientation == Orientation.EAST) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/13.png");
+			}
+			if(orientation == Orientation.SOUTH && orientation == Orientation.WEST) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/14.png");
+			}
+			if(orientation == Orientation.NORTH && orientation == Orientation.WEST) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/15.png");
+			}
+		}
 
-		}
 		
+				
 		return resultImage;
 	}
 
