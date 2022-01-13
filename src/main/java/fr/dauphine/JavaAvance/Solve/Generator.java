@@ -72,14 +72,15 @@ public class Generator {
 	}
 
 	public static void recursiveConstruct(Grid inputGrid, int i, int j) {
-		Piece p = new Piece(i, j);
 		if (inputGrid.allPiecesAreFixed())
 			return;
-		Piece[][] piecesBefore = inputGrid.getAllPieces();
-		Random rd = new Random();
+		Piece p = new Piece(i, j);
+		
+		//Piece[][] piecesBefore = inputGrid.getAllPieces();
+		//Random rd = new Random();
 		
 
-		List<PieceType> piecesPossibles = inputGrid.piecePossible(i, j);
+		List<PieceType> piecesPossibles = inputGrid.piecePossible(i, j, p.getConnectors());
 		Collections.shuffle(piecesPossibles);
 		PieceType pType = piecesPossibles.get(0);
 		p.setType(pType);
@@ -91,10 +92,38 @@ public class Generator {
 				break;
 			p.turn();
 		}
+
+		if(inputGrid.isTotallyConnected(p))
+			return;
 		
+		List<Orientation> pDirections = inputGrid.getFreeAdjacentCell(p);
+		Collections.shuffle(pDirections);
+
+		int[] nextDirection = orientationToCoordinates(inputGrid,(Orientation) pDirections.get(0), i, j);
+		
+		recursiveConstruct(inputGrid,nextDirection[0], nextDirection[1]);
 
 
 
+	}
+
+	public static int[] orientationToCoordinates(Grid inputGrid, Orientation ori, int i, int j) {
+		int[] coords = new int[2];
+		switch (ori) {
+			case NORTH:
+				coords[0] = i - 1;
+				break;
+			case SOUTH:
+				coords[0] = i + 1;
+				break;
+			case EAST:
+				coords[1] = j + 1;
+				break;
+			case WEST: 
+				coords[1] = j - 1;
+		}
+
+		return coords;
 	}
 
 	// fin implementation fares

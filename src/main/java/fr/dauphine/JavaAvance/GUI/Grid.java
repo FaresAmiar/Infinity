@@ -1,7 +1,9 @@
 package fr.dauphine.JavaAvance.GUI;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import fr.dauphine.JavaAvance.Components.Orientation;
@@ -69,43 +71,52 @@ public class Grid {
 		return pieces;
 	}
 
-	// f
-	public void adaptOrientation(Piece p) {
-		int i = this.getHeight(), j = this.getWidth();
+	public List<Orientation> getFreeAdjacentCell(Piece p) {
+		int i = p.getPosX(), j = p.getPosY();
+		List<Orientation> oris = new ArrayList<Orientation>();
 
-		// switch (p.getType()) {
-		// case ONECONN:
-		// switch (p.getPosX()) {
-		// case 0:
-		// switch (p.getPosY()) {
-		// case 0:
-		// p.setPossibleOrientations(
-		// ));
-		// case j - 1:
-		// }
-		// }
-		if (p.getType() == PieceType.ONECONN) {
-			if (p.getPosX() == 0) {
-				if (p.getPosY() == 0) {
-					p.setPossibleOrientations(new ArrayList(Arrays.asList(Orientation.EAST, Orientation.SOUTH)));
-					// p.get
-				}
-			}
-		}
+		if(i == 0) 
+			if(j == 0) 
+				oris.addAll(0, Arrays.asList(Orientation.EAST, Orientation.SOUTH));
+			else
+				oris.addAll(0, Arrays.asList(Orientation.WEST,Orientation.EAST, Orientation.SOUTH));
+		else
+			if(j == 0)
+				oris.addAll(0, Arrays.asList(Orientation.NORTH, Orientation.EAST, Orientation.SOUTH));
+			else 
+				oris.addAll(0, Arrays.asList(Orientation.NORTH, Orientation.EAST, Orientation.SOUTH, Orientation.WEST));
 
+		if(this.leftNeighbor(p) != null && oris.contains(Orientation.WEST))
+			oris.remove(Orientation.WEST);
+
+		if(this.rightNeighbor(p) != null && oris.contains(Orientation.EAST))
+			oris.remove(Orientation.EAST);
+
+		if(this.topNeighbor(p) != null && oris.contains(Orientation.NORTH))
+			oris.remove(Orientation.NORTH);
+
+		if(this.bottomNeighbor(p) != null && oris.contains(Orientation.SOUTH))
+			oris.remove(Orientation.SOUTH);
+
+		return oris;
 	}
+
 
 	public List<PieceType> getPieceTypeCorner() {
 		return new ArrayList<PieceType>(Arrays.asList(PieceType.ONECONN, PieceType.LTYPE));
 	}
 
-	public List<PieceType> piecePossible(int i, int j) {
+	public List<PieceType> piecePossible(int i, int j, LinkedList<Orientation> linkedList) {
+		List<PieceType> possible = new ArrayList<PieceType>(
+			Arrays.asList(PieceType.ONECONN, PieceType.LTYPE, PieceType.BAR, PieceType.FOURCONN,
+					PieceType.TTYPE));
+
 		if (this.isCorner(i, j))
-			return getPieceTypeCorner();
-		else
-			return new ArrayList<PieceType>(
-					Arrays.asList(PieceType.ONECONN, PieceType.LTYPE, PieceType.BAR, PieceType.FOURCONN,
-							PieceType.TTYPE));
+			possible.removeAll(new ArrayList<>(Arrays.asList(PieceType.BAR, PieceType.FOURCONN, PieceType.TTYPE)));
+		if(this.isBorderColumn(i, j) || this.isBorderLine(i, j))
+			possible.remove(PieceType.FOURCONN);
+		
+		return possible;
 
 		// if (this.isCorner(i, j) && !this.hasNeighbour(this.getPiece(i, j))) {
 		// if (i == 0 && j == 0) {
