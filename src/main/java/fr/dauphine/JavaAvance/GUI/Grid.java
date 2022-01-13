@@ -3,8 +3,15 @@ package fr.dauphine.JavaAvance.GUI;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import fr.dauphine.JavaAvance.Components.Orientation;
 import fr.dauphine.JavaAvance.Components.Piece;
@@ -71,6 +78,23 @@ public class Grid {
 		return pieces;
 	}
 
+	//f
+	public List<Orientation> getConnectorsEmpty(Piece p) {
+		List<Orientation> connEmpty = new ArrayList<Orientation>();
+		if(p.hasLeftConnector() && this.leftNeighbor(p).getType() == PieceType.VOID)
+			connEmpty.add(Orientation.WEST);
+		if(p.hasRightConnector() && this.rightNeighbor(p).getType() == PieceType.VOID)
+			connEmpty.add(Orientation.EAST);
+		if(p.hasTopConnector() && this.topNeighbor(p).getType() == PieceType.VOID)
+			connEmpty.add(Orientation.NORTH);
+		if(p.hasBottomConnector() && this.bottomNeighbor(p).getType() == PieceType.VOID)
+			connEmpty.add(Orientation.SOUTH);
+
+		return connEmpty;
+
+	}
+
+	//f
 	public List<Orientation> getFreeAdjacentCell(Piece p) {
 		int i = p.getPosX(), j = p.getPosY();
 		List<Orientation> oris = new ArrayList<Orientation>();
@@ -86,20 +110,22 @@ public class Grid {
 			else 
 				oris.addAll(0, Arrays.asList(Orientation.NORTH, Orientation.EAST, Orientation.SOUTH, Orientation.WEST));
 
-		if(this.leftNeighbor(p) != null && oris.contains(Orientation.WEST))
+		if(this.leftNeighbor(p).getType() != PieceType.VOID && oris.contains(Orientation.WEST))
 			oris.remove(Orientation.WEST);
 
-		if(this.rightNeighbor(p) != null && oris.contains(Orientation.EAST))
+		if(this.rightNeighbor(p).getType() != PieceType.VOID && oris.contains(Orientation.EAST))
 			oris.remove(Orientation.EAST);
 
-		if(this.topNeighbor(p) != null && oris.contains(Orientation.NORTH))
+		if(this.topNeighbor(p).getType() != PieceType.VOID && oris.contains(Orientation.NORTH))
 			oris.remove(Orientation.NORTH);
 
-		if(this.bottomNeighbor(p) != null && oris.contains(Orientation.SOUTH))
+		if(this.bottomNeighbor(p).getType() != PieceType.VOID && oris.contains(Orientation.SOUTH))
 			oris.remove(Orientation.SOUTH);
 
 		return oris;
 	}
+
+
 
 
 	public List<PieceType> getPieceTypeCorner() {
@@ -111,18 +137,131 @@ public class Grid {
 			Arrays.asList(PieceType.ONECONN, PieceType.LTYPE, PieceType.BAR, PieceType.FOURCONN,
 					PieceType.TTYPE));
 
+		LinkedList<Integer> pTypesTest = new LinkedList<Integer>(Arrays.asList(4, 3, 2, 5, 1));
 		if (this.isCorner(i, j))
 			possible.removeAll(new ArrayList<>(Arrays.asList(PieceType.BAR, PieceType.FOURCONN, PieceType.TTYPE)));
-		if(this.isBorderColumn(i, j) || this.isBorderLine(i, j))
+		else if(this.isBorderColumn(i, j) || this.isBorderLine(i, j))
 			possible.remove(PieceType.FOURCONN);
+		
+		Piece p, piece;
+		Orientation orientation;
+		Map<PieceType,List<Integer>> badNeighborsForPiece = new HashMap<PieceType,List<Integer>>();
+		List bdNeis = null;
+		PieceType pt = null;
+		Set<Entry<Piece, Orientation>> neighbors;
+		Map neighs;
+
+		for(Integer inte : pTypesTest){
+			for(int k = 0; k < 3; ++k) {
+				bdNeis = new ArrayList<Integer>();
+				pt = PieceType.getTypefromValue(pTypesTest.get(inte));
+				p = new Piece(i,j,pt, Orientation.getOrifromValue(k));
+				neighs = getNeighbourWithDirection(p);
+				neighbors = getNeighbourWithDirection(p).entrySet();
+
+				for(Map.Entry<Piece, Orientation> e : neighbors){
+					piece = e.getKey();
+					orientation = e.getValue();
+
+					if(piece.getType() != PieceType.VOID && (!hasConnector(piece, orientation.getOpposedOrientation())
+					|| !hasConnector(p, orientation) || connectorsOutSide(p).size() != 0))
+						p.setBadNeighbors(p.getBadNeighbors() + 1);
+					
+				}
+				bdNeis.add(p.getBadNeighbors());
+			}
+			badNeighborsForPiece.put(pt,bdNeis);
+		}
+
+		//On va trier les listes pour chaque piece et retenir le plus petit nbBadNeighbors
+		//Ensuite on prend la/les PieceType avec le plus petit et si plusieurs on les ajoutes dans la liste finale
+
+		Set<Entry<PieceType, List<Integer>>> typeAndBadNei = badNeighborsForPiece.entrySet();
+		int minVoisPerType;
+		Map<Integer, PieceType> minBadNeisForType = new TreeMap<Integer, PieceType>((Comparator<Integer>) (o1, o2) -> o1.compareTo(o2));
+	
+		for(Map.Entry<PieceType, List<Integer>> entry : typeAndBadNei) {
+			pt = entry.getKey();
+			bdNeis = entry.getValue();
+
+			Collections.sort(bdNeis);
+			minVoisPerType = (Integer) bdNeis.get(0);
+			minBadNeisForType.put(minVoisPerType, pt);
+			
+		}
+
+		int min = Integer.MAX_VALUE;
+
+		PieceType last;
+		int k = 0;
+		
+
+		for(Map.Entry<Integer, PieceType> entry : minBadNeisForType.entrySet()) {
+			if(k == 0) {
+				min = entry.getKey();
+				++k;
+				continue;
+			}
+			if(entry.getKey() > min) {
+				possible.remove(entry.getValue());
+			}
+			++k;
+		}
+
 		
 		return possible;
 
-		// if (this.isCorner(i, j) && !this.hasNeighbour(this.getPiece(i, j))) {
-		// if (i == 0 && j == 0) {
-		// return
-		// }
-		// }
+	}
+
+	//f
+	public List<Orientation> connectorsOutSide(Piece p) {
+		List<Orientation> connectors = new ArrayList<Orientation>();
+		if(p.getPosX() == 0 && p.hasTopConnector())
+			connectors.add(Orientation.NORTH);
+
+		if(p.getPosX() == getHeight() - 1 && p.hasBottomConnector())
+			connectors.add(Orientation.SOUTH);
+
+		if(p.getPosY() == 0 && p.hasLeftConnector())
+			connectors.add(Orientation.WEST);
+
+		if(p.getPosY() == getWidth() - 1 && p.hasRightConnector())
+			connectors.add(Orientation.EAST);
+
+		return connectors;
+
+	}
+
+	//f
+	public boolean hasConnector(Piece p, Orientation o) {
+		if(o == Orientation.WEST && p.hasLeftConnector())
+			return true;
+		if(o == Orientation.EAST && p.hasRightConnector())
+			return true;
+		if(o == Orientation.NORTH && p.hasTopConnector())
+			return true;
+		if(o == Orientation.SOUTH && p.hasBottomConnector())
+			return true;
+		return false;	
+	}
+
+	//f
+	public Map<Piece,Orientation> getNeighbourWithDirection(Piece p) {
+		Map<Piece, Orientation> m = new HashMap();
+
+		for(Piece pp : listOfNeighbours(p)) {
+			if(p.getPosX() - pp.getPosX() > 0)
+				m.put(pp, Orientation.NORTH);
+			else if(p.getPosX() - pp.getPosX() < 0)
+				m.put(pp, Orientation.SOUTH);
+			if(p.getPosY() - pp.getPosY() > 0)
+				m.put(pp, Orientation.WEST);
+			else if(p.getPosY() - pp.getPosY() > 0)
+				m.put(pp, Orientation.EAST);
+		}
+
+		return m;
+
 	}
 
 	// f

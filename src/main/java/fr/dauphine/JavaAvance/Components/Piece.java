@@ -13,6 +13,7 @@ public class Piece {
 	private Orientation orientation;
 	private LinkedList<Orientation> connectors;
 	private ArrayList<Orientation> possibleOrientations;
+	private int badNeighbors;
 
 	private boolean isFixed;
 
@@ -45,6 +46,22 @@ public class Piece {
 		this.isFixed = false;
 		this.possibleOrientations = type.getListOfPossibleOri();
 	}
+
+	public Piece(Piece p) {
+		posX = p.posX;
+		posY = p.posY;
+		type = p.getType();
+		orientation = p.getOrientation();
+		connectors = p.getConnectors();
+		isFixed = false;
+		possibleOrientations = p.getPossibleOrientations();
+	}
+
+	public int getBadNeighbors() { return badNeighbors; }
+
+	public void setBadNeighbors(int badNeighbors) { this.badNeighbors = badNeighbors; }
+
+	public void resetBadNeighbors() { this.badNeighbors = 0; }
 
 	public void setPossibleOrientations(ArrayList<Orientation> possibleOrientations) {
 		this.possibleOrientations = possibleOrientations;
@@ -112,6 +129,8 @@ public class Piece {
 	public void setOrientation(Orientation orientation) {
 		this.orientation = orientation;
 	}
+
+	
 
 	public LinkedList<Orientation> getConnectors() {
 		return connectors;

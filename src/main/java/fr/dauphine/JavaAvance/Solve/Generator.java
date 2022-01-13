@@ -72,7 +72,7 @@ public class Generator {
 		}
 	}
 
-	
+
 	/**
 	 * 
 	 * @param pieceType
@@ -202,37 +202,34 @@ public class Generator {
 	}
 
 	public static void recursiveConstruct(Grid inputGrid, int i, int j) {
-		if (inputGrid.allPiecesAreFixed())
+		if (i> 0 && j > 0 && inputGrid.allPiecesAreFixed())
 			return;
 		Piece p = new Piece(i, j);
 		boolean skip = false;
 
-		if(inputGrid.numberOfNeibours(p) >= 4) {
-			p.setType(PieceType.ONECONN);
-			skip = true;
-		}
+		do {
+
+			if(inputGrid.numberOfNeibours(p) >= 4 || (inputGrid.numberOfNeibours(p) >= 3 && inputGrid.isCorner(i,j))) {
+				p.setType(PieceType.ONECONN);
+				skip = true;
+			}
 		
 		//Piece[][] piecesBefore = inputGrid.getAllPieces();
 		//Random rd = new Random();
 		
-		if(!skip) {
-			List<PieceType> piecesPossibles = inputGrid.piecePossible(i, j, p.getConnectors());
-			Collections.shuffle(piecesPossibles);
-			PieceType pType = piecesPossibles.get(0);
-			p.setType(pType);
-		}
+			if(!skip) {
+				List<PieceType> piecesPossibles = inputGrid.piecePossible(i, j, p.getConnectors());
+				Collections.shuffle(piecesPossibles);
+				PieceType pType = piecesPossibles.get(0);
+				p.setType(pType);
+			}
 
-		inputGrid.setPiece(i, j, p);
-
-		int k = 0;
-		while(true) {
-			if(k > 3)
-				recursiveConstruct(inputGrid,i,j);
+			inputGrid.setPiece(i, j, p);
+				
 			if(inputGrid.isValidOrientation(i, j))
 				break;
 			p.turn();
-			++k;
-		}
+		}while(true);
 
 		if(inputGrid.isTotallyConnected(p))
 			return;
@@ -241,7 +238,7 @@ public class Generator {
 		Collections.shuffle(pDirections);
 
 		int[] nextDirection = orientationToCoordinates(inputGrid,(Orientation) pDirections.get(0), i, j);
-
+		
 		//if(inputGrid)
 		
 		recursiveConstruct(inputGrid,nextDirection[0], nextDirection[1]);

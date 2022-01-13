@@ -243,10 +243,13 @@ public class GUI implements MouseListener{
 		
 		Grid grid = new Grid(5,5);
 		//Generator.initGrid(grid);
+		//Generator.initRandomGrid(grid);
 		Generator.initRandomGrid(grid);
+		Generator.recursiveConstruct(grid,0,0);
 		
 		GUI gui = new GUI(grid);
 		
+
 		
 		
 		
