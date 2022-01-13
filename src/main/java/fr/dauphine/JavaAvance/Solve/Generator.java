@@ -2,6 +2,7 @@ package fr.dauphine.JavaAvance.Solve;
 
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -70,7 +71,142 @@ public class Generator {
 			}
 		}
 	}
+	
+	
+	/**
+	 * 
+	 * @param pieceType
+	 * @return
+	 * 
+	 * Author Rayan 
+	 */
+	
+	public static Orientation chooseOrientationThankToPieceType(PieceType pieceType) {
+		Orientation res = Orientation.NORTH;
+		Random randomizer = new Random();
+		int randomNumber = 0;
+		
+		//Gestion de la piece ONECONN
+		
+		if(pieceType == PieceType.ONECONN) {
+			randomNumber = randomizer.nextInt(4);
+			if(randomNumber == 0) {
+				res = Orientation.NORTH;
+			}
+			if(randomNumber == 1) {
+				res = Orientation.EAST;
+			}
+			if(randomNumber == 2) {
+				res = Orientation.SOUTH;
+			}
+			if(randomNumber == 3) {
+				res = Orientation.WEST;
+			}
+		}
+		
+		//Gestion de la pièce BAR
+		if(pieceType == PieceType.BAR) {
+			randomNumber = randomizer.nextInt(2);
+			if(randomNumber == 0) {
+				res = Orientation.NORTH;
+			}
+			if(randomNumber == 1) {
+				res = Orientation.EAST;
+			}			
+		}
+		
+		//Gestion de la pièce TTYPE
+		if(pieceType == PieceType.TTYPE) {
+			randomNumber = randomizer.nextInt(4);
+			if(randomNumber == 0) {
+				res = Orientation.NORTH;
+			}
+			if(randomNumber == 1) {
+				res = Orientation.EAST;
+			}
+			if(randomNumber == 2) {
+				res = Orientation.SOUTH;
+			}
+			if(randomNumber == 3) {
+				res = Orientation.WEST;
+			}
+		}
+		
+		//Gestion de la pièce LTYPE
+		
+		if(pieceType == PieceType.LTYPE) {
+			randomNumber = randomizer.nextInt(4);
+			if(randomNumber == 0) {
+				res = Orientation.NORTH;
+			}
+			if(randomNumber == 1) {
+				res = Orientation.EAST;
+			}
+			if(randomNumber == 2) {
+				res = Orientation.SOUTH;
+			}
+			if(randomNumber == 3) {
+				res = Orientation.WEST;
+			}
+		}
+		
+		return res;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Méthode permettant d'init un grid entiere avec des orientations et pieces au hasard
+	 * @param inputGrid
+	 * @param i
+	 * @param j
+	 * Author Rayan
+	 *
+	 */
+	
+	public static void initRandomGrid(Grid grid) {
+		
+		/*List<PieceType> typesDePieces = Arrays.asList(PieceType.VOID, PieceType.BAR, PieceType.FOURCONN, PieceType.LTYPE, PieceType.ONECONN,PieceType.TTYPE);
+		List<Orientation> orientations = Arrays.asList(Orientation.EAST,Orientation.NORTH,Orientation.SOUTH,Orientation.WEST);
+		
+		
+		for (int i = 0; i < grid.getHeight(); ++i) {
+			for (int j = 0; j < grid.getWidth(); ++j) {
+				Random randomizer = new Random();
+				PieceType randomPieceType = typesDePieces.get(randomizer.nextInt(typesDePieces.size()));
 
+				Orientation randomOrientation = orientations.get(randomizer.nextInt(orientations.size()));
+								
+				grid.setPiece(i, j, new Piece(i, j, randomPieceType, randomOrientation));
+				
+				System.out.println("Type de piece choisit "+ randomPieceType);
+				System.out.println("Orientation choisit "+ randomOrientation);
+				System.out.println("");
+				
+			}
+		}*/
+			
+		List<PieceType> typesDePieces = Arrays.asList(PieceType.VOID, PieceType.BAR, PieceType.FOURCONN, PieceType.LTYPE, PieceType.ONECONN,PieceType.TTYPE);
+		for (int i = 0; i < grid.getHeight(); ++i) {
+			for (int j = 0; j < grid.getWidth(); ++j) {
+				Random randomizer = new Random();
+				PieceType randomPieceType = typesDePieces.get(randomizer.nextInt(typesDePieces.size()));
+				Orientation orientation = chooseOrientationThankToPieceType(randomPieceType);
+				grid.setPiece(i, j, new Piece(i, j, randomPieceType, orientation));
+				
+				
+			}
+		}
+	}
+		
+	
+	
+	
+	
+	
+	
 	public static void recursiveConstruct(Grid inputGrid, int i, int j) {
 		if (inputGrid.allPiecesAreFixed())
 			return;

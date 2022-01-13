@@ -4,10 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import javax.swing.ImageIcon;
@@ -29,7 +33,7 @@ import fr.dauphine.JavaAvance.Solve.Generator;
  * 
  *
  */
-public class GUI {
+public class GUI implements MouseListener{
 
 	
 	private JFrame frame;
@@ -78,8 +82,9 @@ public class GUI {
 
 	/**
 	 * Initialize the contents of the frame.
-	 * 
+	 * And implements also the mouseListener and mouse clicked function
 	 * @throws IOException
+	 * Author Rayan
 	 */
 	private void initialize(Grid grid) {
 		
@@ -92,24 +97,34 @@ public class GUI {
 			this.frame.setTitle("InfinityLoop Game Farès_Rayan");
 			this.frame.setLayout(gridLayout);
 			this.frame.setSize(500, 500);
+			this.frame.addMouseListener(this);
 			
 			
-			
-			for (int i = 0; i < grid.getHeight(); i++) {
+		for (int i = 0; i < grid.getHeight(); i++) {
 				for (int j = 0; j < grid.getWidth(); j++) {
+					Piece pieceClick = grid.getPiece(i, j);
+					System.out.println(pieceClick);
 					String pieceType = grid.getPiece(i, j).getType().toString();
-					JButton btn_i = new JButton(pieceType);
-					//btn_i.setIcon(new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/1.png"));
+					Orientation pieceOrientation = grid.getPiece(i, j).getOrientation();
+					JButton btn_i = new JButton();
+					btn_i.setIcon(getImageIcon(pieceClick));
+					btn_i.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {								
+							pieceClick.turn();
+							btn_i.setIcon(getImageIcon(pieceClick));
+							System.out.println(pieceClick.getOrientation().toString());
+						}
+						
+					});
+					
 					this.frame.add(btn_i);
 
 				}
 			}
-			
-/*			for (int i = 0; i < grid.getHeight()*grid.getWidth(); i++) {
-				JButton btn_i = new JButton();
-				this.frame.add(btn_i);
-			}
-*/	
+	
+		
+
 			this.frame.setLocationRelativeTo(null);
 			this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			this.frame.setVisible(true);
@@ -120,57 +135,72 @@ public class GUI {
 	}
 
 	/**
-	 * Display the correct image from the piece's type and orientation
+	 * Display the correct image from the piece's type and connectors/orientation
 	 * 
 	 * @param p
 	 *            the piece
 	 * @return an image icon
+	 * author Rayan
 	 */
 	private ImageIcon getImageIcon(Piece p) {
-		//To be implemented
-		//A finir
 		ImageIcon resultImage = null;
-		PieceType typeOfPiece = p.getType();
-		Orientation orientation = p.getOrientation();
 		
+		PieceType typeOfPiece = p.getType();
+		LinkedList<Orientation> connectors = p.getConnectors();
+				
+		
+		if(typeOfPiece == PieceType.VOID) {
+			
+			resultImage = new ImageIcon("");
+		
+		}
 		
 		if(typeOfPiece == PieceType.ONECONN) {
-			if(orientation == Orientation.NORTH) {
-				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/1.png");				
+			
+			if(connectors.get(0) == Orientation.NORTH) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/1.png");
 			}
-			if(orientation == Orientation.EAST) {
-				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/2.png");				
+			if(connectors.get(0) == Orientation.EAST) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/2.png");
 			}
-			if(orientation == Orientation.SOUTH) {
-				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/3.png");				
+			if(connectors.get(0) == Orientation.SOUTH) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/3.png");					
 			}
-			if(orientation == Orientation.WEST) {
+			if(connectors.get(0) == Orientation.WEST) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/4.png");				
 			}
+			
+
+			
 		}
 		
 		if(typeOfPiece == PieceType.BAR) {
-			if(orientation == Orientation.NORTH && orientation == Orientation.SOUTH ) {
+			
+			if(connectors.get(0) == Orientation.NORTH && connectors.get(1) == Orientation.SOUTH) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/5.png");
-			}
-			if(orientation == Orientation.EAST && orientation == Orientation.WEST) {
+			}			
+
+			if(connectors.get(0) == Orientation.WEST && connectors.get(1) == Orientation.EAST) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/6.png");				
 			}
+			
+			
 		}
 		
 		if(typeOfPiece == PieceType.TTYPE) {
-			if(orientation == Orientation.NORTH && orientation == Orientation.EAST && orientation == Orientation.WEST ) {
-				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/7.png");
+			if(connectors.get(0) == Orientation.NORTH && connectors.get(1) == Orientation.EAST && connectors.get(2) == Orientation.WEST) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/7.png");				
 			}
-			if(orientation == Orientation.NORTH && orientation == Orientation.EAST && orientation == Orientation.SOUTH ) {
+			if(connectors.get(0) == Orientation.EAST && connectors.get(1) == Orientation.NORTH && connectors.get(2) == Orientation.SOUTH) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/8.png");
 			}
-			if(orientation == Orientation.SOUTH && orientation == Orientation.EAST && orientation == Orientation.WEST ) {
+			if(connectors.get(0) == Orientation.SOUTH && connectors.get(1) == Orientation.WEST && connectors.get(2) == Orientation.EAST) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/9.png");
 			}
-			if(orientation == Orientation.NORTH && orientation == Orientation.SOUTH && orientation == Orientation.WEST ) {
+			if(connectors.get(0) == Orientation.WEST && connectors.get(1) == Orientation.NORTH && connectors.get(2) == Orientation.SOUTH) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/10.png");
 			}
+
 		}
 		
 		if(typeOfPiece == PieceType.FOURCONN) {
@@ -179,33 +209,78 @@ public class GUI {
 		
 		
 		if(typeOfPiece == PieceType.LTYPE) {
-			if(orientation == Orientation.NORTH && orientation == Orientation.EAST) {
+			
+			if(connectors.get(0) == Orientation.NORTH && connectors.get(1) == Orientation.EAST) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/12.png");
 			}
-			if(orientation == Orientation.SOUTH && orientation == Orientation.EAST) {
+			if(connectors.get(0) == Orientation.EAST && connectors.get(1) == Orientation.SOUTH) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/13.png");
 			}
-			if(orientation == Orientation.SOUTH && orientation == Orientation.WEST) {
+			if(connectors.get(0) == Orientation.SOUTH && connectors.get(1) == Orientation.WEST) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/14.png");
 			}
-			if(orientation == Orientation.NORTH && orientation == Orientation.WEST) {
+			if(connectors.get(0) == Orientation.WEST && connectors.get(1) == Orientation.NORTH) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/15.png");
 			}
+
+			
 		}
+		
+		return resultImage;
+		
+		
 
 		
-				
-		return resultImage;
 	}
 
+	
+
+	
+	
+	
 	
 	public static void main (String[] args) {
 		
 		Grid grid = new Grid(5,5);
-		Generator.initGrid(grid);
+		//Generator.initGrid(grid);
+		Generator.initRandomGrid(grid);
+		
 		GUI gui = new GUI(grid);
 		
 		
+		
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println("test");
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
 		
 	}

@@ -108,6 +108,10 @@ public class Piece {
 	public Orientation getOrientation() {
 		return orientation;
 	}
+	
+	public void setOrientation(Orientation orientation) {
+		this.orientation = orientation;
+	}
 
 	public LinkedList<Orientation> getConnectors() {
 		return connectors;
