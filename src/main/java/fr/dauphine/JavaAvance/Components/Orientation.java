@@ -64,4 +64,5 @@ public enum Orientation {
 						: (this.getOrientation() == Orientation.SOUTH ? Orientation.WEST
 								: (this.getOrientation() == Orientation.EAST ? Orientation.SOUTH : null)));
 	}
+
 }
