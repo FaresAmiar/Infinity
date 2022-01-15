@@ -69,6 +69,7 @@ public class Main {
                 Generator.initRandomGrid(g);
 
                 GUI gui = new GUI(g);
+
                 // while(true);
 
                 // generate grid and store it to outputFile...
@@ -100,6 +101,7 @@ public class Main {
                 throw new ParseException(
                         "You must specify at least one of the following options: -generate -check -solve ");
             }
+
         } catch (ParseException e) {
             System.err.println("Error parsing commandline : " + e.getMessage());
             HelpFormatter formatter = new HelpFormatter();
