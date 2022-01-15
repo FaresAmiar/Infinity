@@ -26,6 +26,7 @@ import javax.swing.SwingUtilities;
 import fr.dauphine.JavaAvance.Components.Orientation;
 import fr.dauphine.JavaAvance.Components.Piece;
 import fr.dauphine.JavaAvance.Components.PieceType;
+import fr.dauphine.JavaAvance.Main.GridParser;
 import fr.dauphine.JavaAvance.Solve.Checker;
 import fr.dauphine.JavaAvance.Solve.Generator;
 
@@ -34,17 +35,17 @@ import fr.dauphine.JavaAvance.Solve.Generator;
  * 
  *
  */
-public class GUI implements MouseListener{
+public class GUI implements MouseListener {
 
-	
 	private JFrame frame;
+	private String outputFile;
 
 	/**
 	 * 
 	 * @param inputFile
-	 *            String from IO
+	 *                  String from IO
 	 * @throws IOException
-	 *             if there is a problem with the gui
+	 *                     if there is a problem with the gui
 	 */
 	public static void startGUI(String inputFile) throws NullPointerException {
 		// We have to check that the grid is generated before to launch the GUI
@@ -81,30 +82,37 @@ public class GUI implements MouseListener{
 		initialize(grid);
 	}
 
+	public GUI(Grid g, String outputFile) {
+		initialize(g);
+		this.outputFile = outputFile;
+
+	}
+
 	/**
 	 * Initialize the contents of the frame.
 	 * And implements also the mouseListener and mouse clicked function
+	 * 
 	 * @throws IOException
-	 * Author Rayan
+	 *                     Author Rayan
 	 */
 	private void initialize(Grid grid) {
-		
+
 		// To implement:
 		// creating frame, labels
 		// Implementing method mouse clicked of interface MouseListener.
-		
+
 		this.frame = new JFrame("Multiple panel");
-		
+
 		GridLayout gridLayout = new GridLayout(grid.getHeight(), grid.getWidth());
 		JPanel infinityLoopGame_panel = new JPanel();
 		infinityLoopGame_panel.setLayout(gridLayout);
 		infinityLoopGame_panel.setBackground(Color.WHITE);
-		
+
 		this.frame.addMouseListener(this);
-		
+
 		for (int i = 0; i < grid.getHeight(); i++) {
 			for (int j = 0; j < grid.getWidth(); j++) {
-				
+
 				Piece pieceClick = grid.getPiece(i, j);
 				System.out.println(pieceClick);
 				String pieceType = grid.getPiece(i, j).getType().toString();
@@ -113,26 +121,24 @@ public class GUI implements MouseListener{
 				btn_i.setIcon(getImageIcon(pieceClick));
 				btn_i.addActionListener(new ActionListener() {
 					@Override
-					public void actionPerformed(ActionEvent e) {								
+					public void actionPerformed(ActionEvent e) {
 						pieceClick.turn();
 						btn_i.setIcon(getImageIcon(pieceClick));
 						System.out.println(pieceClick.getOrientation().toString());
 					}
-					
+
 				});
-				
+
 				infinityLoopGame_panel.add(btn_i);
-				
 
 			}
-		}		
-		
-		
+		}
+
 		JPanel buttonsControl_panel = new JPanel();
 		buttonsControl_panel.setBackground(Color.GRAY);
 		JButton btn_checker = new JButton("Check this grid");
 		btn_checker.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("clicker le bouton checker");
@@ -141,59 +147,57 @@ public class GUI implements MouseListener{
 		});
 		JButton btn_solver = new JButton("Solve this grid");
 		btn_solver.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("clicker le bouton solver");
 				JOptionPane.showMessageDialog(buttonsControl_panel, "Résolution en cours.... ");
-				
+
 			}
 		});
 		JButton btn_generate = new JButton("Generate a new grid ?");
 		btn_generate.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("clicker le bouton generate");
 				Generator.initRandomGrid(grid);
 				initialize(grid);
-				
+
 			}
 		});
-		
+
 		JButton btn_export = new JButton("Export grid");
 		btn_export.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("click le bouton export");
-				
-				
+				try {
+					GridParser.saveGrid(GridParser.convertGrid(grid), outputFile);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
 			}
 		});
-		
-		
+
 		buttonsControl_panel.add(btn_checker);
 		buttonsControl_panel.add(btn_solver);
 		buttonsControl_panel.add(btn_generate);
 		buttonsControl_panel.add(btn_export);
-		
-		
-		
-		//Mise en place des boutons
-				
-		//Création des Panels
+
+		// Mise en place des boutons
+
+		// Création des Panels
 		this.frame.add(infinityLoopGame_panel, BorderLayout.CENTER);
 		this.frame.add(buttonsControl_panel, BorderLayout.PAGE_END);
-		
-		
-		
+
 		this.frame.setSize(600, 600);
 		this.frame.setLocationRelativeTo(null);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setVisible(true);
-		
-		
 
 	}
 
@@ -201,127 +205,110 @@ public class GUI implements MouseListener{
 	 * Display the correct image from the piece's type and connectors/orientation
 	 * 
 	 * @param p
-	 *            the piece
+	 *          the piece
 	 * @return an image icon
-	 * author Rayan
+	 *         author Rayan
 	 */
 	private ImageIcon getImageIcon(Piece p) {
 		ImageIcon resultImage = null;
-		
+
 		PieceType typeOfPiece = p.getType();
 		LinkedList<Orientation> connectors = p.getConnectors();
-				
-		
-		if(typeOfPiece == PieceType.VOID) {
-			
+
+		if (typeOfPiece == PieceType.VOID) {
+
 			resultImage = new ImageIcon("");
-		
+
 		}
-		
-		if(typeOfPiece == PieceType.ONECONN) {
-			
-			if(connectors.get(0) == Orientation.NORTH) {
+
+		if (typeOfPiece == PieceType.ONECONN) {
+
+			if (connectors.get(0) == Orientation.NORTH) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/1.png");
 			}
-			if(connectors.get(0) == Orientation.EAST) {
+			if (connectors.get(0) == Orientation.EAST) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/2.png");
 			}
-			if(connectors.get(0) == Orientation.SOUTH) {
-				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/3.png");					
+			if (connectors.get(0) == Orientation.SOUTH) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/3.png");
 			}
-			if(connectors.get(0) == Orientation.WEST) {
-				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/4.png");				
+			if (connectors.get(0) == Orientation.WEST) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/4.png");
 			}
-			
 
-			
 		}
-		
-		if(typeOfPiece == PieceType.BAR) {
-			
-			if(connectors.get(0) == Orientation.NORTH && connectors.get(1) == Orientation.SOUTH) {
+
+		if (typeOfPiece == PieceType.BAR) {
+
+			if (connectors.get(0) == Orientation.NORTH && connectors.get(1) == Orientation.SOUTH) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/5.png");
-			}			
+			}
 
-			if(connectors.get(0) == Orientation.WEST && connectors.get(1) == Orientation.EAST) {
-				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/6.png");				
+			if (connectors.get(0) == Orientation.WEST && connectors.get(1) == Orientation.EAST) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/6.png");
 			}
-			
-			
+
 		}
-		
-		if(typeOfPiece == PieceType.TTYPE) {
-			if(connectors.get(0) == Orientation.NORTH && connectors.get(1) == Orientation.EAST && connectors.get(2) == Orientation.WEST) {
-				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/7.png");				
+
+		if (typeOfPiece == PieceType.TTYPE) {
+			if (connectors.get(0) == Orientation.NORTH && connectors.get(1) == Orientation.EAST
+					&& connectors.get(2) == Orientation.WEST) {
+				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/7.png");
 			}
-			if(connectors.get(0) == Orientation.EAST && connectors.get(1) == Orientation.NORTH && connectors.get(2) == Orientation.SOUTH) {
+			if (connectors.get(0) == Orientation.EAST && connectors.get(1) == Orientation.NORTH
+					&& connectors.get(2) == Orientation.SOUTH) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/8.png");
 			}
-			if(connectors.get(0) == Orientation.SOUTH && connectors.get(1) == Orientation.WEST && connectors.get(2) == Orientation.EAST) {
+			if (connectors.get(0) == Orientation.SOUTH && connectors.get(1) == Orientation.WEST
+					&& connectors.get(2) == Orientation.EAST) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/9.png");
 			}
-			if(connectors.get(0) == Orientation.WEST && connectors.get(1) == Orientation.NORTH && connectors.get(2) == Orientation.SOUTH) {
+			if (connectors.get(0) == Orientation.WEST && connectors.get(1) == Orientation.NORTH
+					&& connectors.get(2) == Orientation.SOUTH) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/10.png");
 			}
 
 		}
-		
-		if(typeOfPiece == PieceType.FOURCONN) {
+
+		if (typeOfPiece == PieceType.FOURCONN) {
 			resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/11.png");
 		}
-		
-		
-		if(typeOfPiece == PieceType.LTYPE) {
-			
-			if(connectors.get(0) == Orientation.NORTH && connectors.get(1) == Orientation.EAST) {
+
+		if (typeOfPiece == PieceType.LTYPE) {
+
+			if (connectors.get(0) == Orientation.NORTH && connectors.get(1) == Orientation.EAST) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/12.png");
 			}
-			if(connectors.get(0) == Orientation.EAST && connectors.get(1) == Orientation.SOUTH) {
+			if (connectors.get(0) == Orientation.EAST && connectors.get(1) == Orientation.SOUTH) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/13.png");
 			}
-			if(connectors.get(0) == Orientation.SOUTH && connectors.get(1) == Orientation.WEST) {
+			if (connectors.get(0) == Orientation.SOUTH && connectors.get(1) == Orientation.WEST) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/14.png");
 			}
-			if(connectors.get(0) == Orientation.WEST && connectors.get(1) == Orientation.NORTH) {
+			if (connectors.get(0) == Orientation.WEST && connectors.get(1) == Orientation.NORTH) {
 				resultImage = new ImageIcon("../Infinity/src/main/resources/fr/dauphine/JavaAvance/icons/io/15.png");
 			}
 
-			
 		}
-		
-		return resultImage;
-		
-		
 
-		
+		return resultImage;
+
 	}
 
-	
+	public static void main(String[] args) {
 
-	
-	
-	
-	
-	public static void main (String[] args) {
-		
-		Grid grid = new Grid(5,5);
+		Grid grid = new Grid(5, 5);
 		Generator.initGrid(grid);
-		//Generator.initRandomGrid(grid);
+		Generator.initRandomGrid(grid);
 
-		//Generator.initRandomGrid(grid);
-
-
+		// Generator.initRandomGrid(grid);
 
 		Generator.initializeQueue();
 
-		Generator.recursiveConstruct(grid,0,0);
-		
-		GUI gui = new GUI(grid);
-		
+		// Generator.recursiveConstruct(grid, 0, 0);
 
-		
-		
-		
+		GUI gui = new GUI(grid);
+
 	}
 
 	@Override
@@ -333,27 +320,24 @@ public class GUI implements MouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
-		
+
 	}
 }

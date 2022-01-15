@@ -68,7 +68,17 @@ public class Main {
                 Grid g = new Grid(height, width);
                 Generator.initRandomGrid(g);
 
-                GUI gui = new GUI(g);
+                GUI gui = new GUI(g, outputFile);
+
+                try {
+                    GridParser.saveGrid(GridParser.convertGrid(g), outputFile);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+                while (true)
+                    ;
 
                 // while(true);
 

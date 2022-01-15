@@ -1,5 +1,16 @@
 package fr.dauphine.JavaAvance.Main;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.channels.FileLock;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.channels.FileChannel;
+import java.io.RandomAccessFile;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import fr.dauphine.JavaAvance.Components.Orientation;
 import fr.dauphine.JavaAvance.Components.Piece;
 import fr.dauphine.JavaAvance.Components.PieceType;
@@ -10,6 +21,7 @@ public class GridParser {
 
     private static final String newLine = System.getProperty("line.separator");
     private Grid inputGrid;
+    private static final Charset charset = StandardCharsets.UTF_16;
 
     public static String convertGrid(Grid grid) {
         StringBuilder sb = new StringBuilder();
@@ -26,6 +38,26 @@ public class GridParser {
         }
 
         return sb.toString();
+    }
+
+    public static void saveGrid(String grid, String path) throws IOException {
+        if (path.equals(""))
+            path = "grid.txt";
+        File f = new File(path);
+
+        RandomAccessFile stream = new RandomAccessFile(path, "rw");
+
+        FileChannel fc = stream.getChannel();
+
+        FileLock verrou = null;
+        verrou = fc.tryLock();
+
+        stream.write(grid.getBytes(charset));
+        verrou.release();
+
+        stream.close();
+        fc.close();
+
     }
 
     public static void main(String[] args) {
