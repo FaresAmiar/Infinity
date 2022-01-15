@@ -10,7 +10,7 @@ import fr.dauphine.JavaAvance.GUI.Grid;
  
 class GridTest {
  
-    /*@Test
+    @Test
     void testGetConnectorsEmpty() {
         Grid g = new Grid(2,2);
         Piece p1 = new Piece(0,0,PieceType.LTYPE,Orientation.NORTH);
@@ -28,7 +28,7 @@ class GridTest {
 
 
 
-    }*/
+    }
 
     @Test
     void testgetVoidConnectorsCoords() {
@@ -49,6 +49,8 @@ class GridTest {
                 System.out.println(ii + "  ,");
         assertTrue(tab1[0][0] == 2 && tab1[0][1] == 0);
     }
+
+    
 
     
 }

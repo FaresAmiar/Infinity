@@ -40,7 +40,7 @@ public class GridParser {
         return sb.toString();
     }
 
-    public static void saveGrid(String grid, String path) throws IOException {
+    public static File saveGrid(String grid, String path) throws IOException {
         if (path.equals(""))
             path = "grid.txt";
 
@@ -59,6 +59,7 @@ public class GridParser {
         stream.close();
         fc.close();
 
+        return f;
     }
 
     public static Grid convertFile(String filename) throws IOException {

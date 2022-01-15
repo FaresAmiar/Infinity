@@ -68,6 +68,7 @@ public class Main {
                 Grid g = new Grid(height, width);
                 Generator.initRandomGrid(g);
 
+                //Generator.recursiveConstruct(g,0,0);
                 GUI gui = new GUI(g, outputFile);
 
                 try {
@@ -77,14 +78,10 @@ public class Main {
                     e.printStackTrace();
                 }
 
-                while (true)
-                    ;
+                while(true);
 
                 // while(true);
 
-                // generate grid and store it to outputFile...
-
-                // ...
             } else if (cmd.hasOption("s")) {
                 System.out.println("Running phineloop solver.");
                 inputFile = cmd.getOptionValue("s");

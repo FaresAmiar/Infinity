@@ -645,13 +645,13 @@ public class Grid {
 		int Y = p.getPosY();
 		int count = 0;
 
-		if (Y < this.getHeight() - 1 && getPiece(Y + 1, X).getType() != PieceType.VOID && getPiece(Y + 1, X).isFixed())
+		if (Y < this.getHeight() - 1 && getPiece(X + 1, Y).getType() != PieceType.VOID && getPiece(X + 1, Y).isFixed())
 			count++;
-		if (X < this.getWidth() - 1 && getPiece(Y, X + 1).getType() != PieceType.VOID && getPiece(Y, X + 1).isFixed())
+		if (X < this.getWidth() - 1 && getPiece(X, Y + 1).getType() != PieceType.VOID && getPiece(X, Y + 1).isFixed())
 			count++;
-		if (Y > 0 && getPiece(Y - 1, X).getType() != PieceType.VOID && getPiece(Y - 1, X).isFixed())
+		if (Y > 0 && getPiece(X - 1, Y).getType() != PieceType.VOID && getPiece(X - 1, Y).isFixed())
 			count++;
-		if (X > 0 && getPiece(Y, X - 1).getType() != PieceType.VOID && getPiece(Y, X - 1).isFixed())
+		if (X > 0 && getPiece(X, Y - 1).getType() != PieceType.VOID && getPiece(X, Y - 1).isFixed())
 			count++;
 		return count;
 	}
@@ -701,8 +701,8 @@ public class Grid {
 	 * @return the piece or null if p is the last piece
 	 */
 	public Piece getNextPiece(Piece p) {
-		int i = p.getPosY();
-		int j = p.getPosX();
+		int i = p.getPosX();
+		int j = p.getPosY();
 		if (j < this.getWidth() - 1) {
 			p = this.getPiece(i, j + 1);
 		} else {
@@ -725,8 +725,8 @@ public class Grid {
 	 */
 	public Piece getNextPieceInv(Piece p) {
 
-		int i = p.getPosY();
-		int j = p.getPosX();
+		int i = p.getPosX();
+		int j = p.getPosY();
 		if (j > 0) {
 			p = this.getPiece(i, j - 1);
 		} else {

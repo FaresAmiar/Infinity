@@ -17,7 +17,7 @@ public class Piece {
 
 	private boolean isFixed;
 
-	public Piece(int posY, int posX) {
+	public Piece(int posX, int posY) {
 		this.posX = posX;
 		this.posY = posY;
 		this.type = PieceType.VOID;
@@ -27,7 +27,7 @@ public class Piece {
 		this.possibleOrientations = type.getListOfPossibleOri();
 	}
 
-	public Piece(int posY, int posX, PieceType type, Orientation orientation) {
+	public Piece(int posX, int posY, PieceType type, Orientation orientation) {
 		this.posX = posX;
 		this.posY = posY;
 		this.type = type;
@@ -37,7 +37,7 @@ public class Piece {
 		this.possibleOrientations = type.getListOfPossibleOri();
 	}
 
-	public Piece(int posY, int posX, int typeValue, int orientationValue) {
+	public Piece(int posX, int posY, int typeValue, int orientationValue) {
 		this.posX = posX;
 		this.posY = posY;
 		this.type = PieceType.getTypefromValue(typeValue);
@@ -280,7 +280,7 @@ public class Piece {
 	 */
 	@Override
 	public String toString() {
-		String s = "[" + this.getPosY() + ", " + this.getPosX() + "] " + this.getType() + " ";
+		String s = "[" + this.getPosX() + ", " + this.getPosY() + "] " + this.getType() + " ";
 		for (Orientation ori : this.getConnectors()) {
 			s += " " + ori.toString();
 		}
