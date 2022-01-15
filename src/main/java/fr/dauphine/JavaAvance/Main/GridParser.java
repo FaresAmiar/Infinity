@@ -8,19 +8,21 @@ import fr.dauphine.JavaAvance.Solve.Generator;
 
 public class GridParser {
 
+    private static final String newLine = System.getProperty("line.separator");
     private Grid inputGrid;
 
     public static String convertGrid(Grid grid) {
         StringBuilder sb = new StringBuilder();
-        sb.append(grid.getHeight() + "\n");
-        sb.append(grid.getWidth() + "\n");
+
+        sb.append(grid.getHeight() + newLine);
+        sb.append(grid.getWidth() + newLine);
 
         for (Piece[] pieces : grid.getAllPieces()) {
-            sb.append("\n");
             for (Piece p : pieces) {
                 sb.append(PieceType.getValueFromType(p.getType()) + ","
                         + Orientation.getValueFromOri(p.getOrientation()) + " ");
             }
+            sb.append(newLine);
         }
 
         return sb.toString();
