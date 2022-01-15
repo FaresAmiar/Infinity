@@ -96,6 +96,55 @@ public class Main {
         else {
             throw new ParseException("You must specify at least one of the following options: -generate -check -solve ");           
         }
+<<<<<<< Updated upstream
+=======
+
+        try {
+            if (cmd.hasOption("g")) {
+                System.out.println("Running phineloop generator.");
+                String[] gridformat = cmd.getOptionValue("g").split("x");
+                width = Integer.parseInt(gridformat[0]);
+                height = Integer.parseInt(gridformat[1]);
+                if (!cmd.hasOption("o"))
+                    throw new ParseException("Missing mandatory --output argument.");
+                outputFile = cmd.getOptionValue("o");
+
+                Grid g = new Grid(height, width);
+                Generator.initRandomGrid(g);
+
+                GUI gui = new GUI(g);
+                //while(true);
+
+                // generate grid and store it to outputFile...
+
+                // ...
+            } else if (cmd.hasOption("s")) {
+                System.out.println("Running phineloop solver.");
+                inputFile = cmd.getOptionValue("s");
+                if (!cmd.hasOption("o"))
+                    throw new ParseException("Missing mandatory --output argument.");
+                outputFile = cmd.getOptionValue("o");
+                boolean solved = false;
+
+                // load grid from inputFile, solve it and store result to outputFile...
+                // ...
+
+                System.out.println("SOLVED: " + solved);
+            }
+
+            else if (cmd.hasOption("c")) {
+                System.out.println("Running phineloop checker.");
+                inputFile = cmd.getOptionValue("c");
+                boolean solved = false;
+
+                // load grid from inputFile and check if it is solved...
+                // ...
+                System.out.println("SOLVED: " + solved);
+            } else {
+                throw new ParseException(
+                        "You must specify at least one of the following options: -generate -check -solve ");
+            }
+>>>>>>> Stashed changes
         } catch (ParseException e) {
             System.err.println("Error parsing commandline : " + e.getMessage());
             HelpFormatter formatter = new HelpFormatter();

@@ -160,9 +160,23 @@ public class GUI implements MouseListener{
 				
 			}
 		});
+		
+		JButton btn_export = new JButton("Export grid");
+		btn_export.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("click le bouton export");
+				
+				
+			}
+		});
+		
+		
 		buttonsControl_panel.add(btn_checker);
 		buttonsControl_panel.add(btn_solver);
 		buttonsControl_panel.add(btn_generate);
+		buttonsControl_panel.add(btn_export);
 		
 		
 		
@@ -174,7 +188,7 @@ public class GUI implements MouseListener{
 		
 		
 		
-		this.frame.setSize(500, 500);
+		this.frame.setSize(600, 600);
 		this.frame.setLocationRelativeTo(null);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setVisible(true);
