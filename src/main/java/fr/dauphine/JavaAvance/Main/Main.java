@@ -91,22 +91,22 @@ public class Main {
                 if (!cmd.hasOption("o"))
                     throw new ParseException("Missing mandatory --output argument.");
                 outputFile = cmd.getOptionValue("o");
-                boolean solved = false;
 
-                // load grid from inputFile, solve it and store result to outputFile...
-                // ...
+                Grid g = GridParser.convertFile(inputFile);
 
-                System.out.println("SOLVED: " + solved);
+                Grid solved = null;
+                // solved = Solver.solve(g);
+
+                GridParser.saveGrid(GridParser.convertGrid(solved), outputFile);
+
             }
 
             else if (cmd.hasOption("c")) {
                 System.out.println("Running phineloop checker.");
                 inputFile = cmd.getOptionValue("c");
-                boolean solved = false;
 
-                // load grid from inputFile and check if it is solved...
-                // ...
-                System.out.println("SOLVED: " + solved);
+                Checker.checker(inputFile);
+
             } else {
                 throw new ParseException(
                         "You must specify at least one of the following options: -generate -check -solve ");
@@ -117,6 +117,9 @@ public class Main {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("phineloopgen", options);
             System.exit(1); // exit with error
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         System.exit(0);
 

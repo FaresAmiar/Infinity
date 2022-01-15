@@ -271,7 +271,7 @@ public class Generator {
 		int[] nextDirection = Grid.orientationToCoordinates((Orientation) pDirections.get(0), i, j);
 
 		//si la piece qui a ete ajoutée a 2 connecteurs vides ou plus, on l'ajoute a la queue d'attente
-		if(p.getType() == PieceType.FOURCONN || p.getType() == PieceType.TTYPE){
+		if(p.getType() == PieceType.FOURCONN || p.getType() == PieceType.TTYPE) {
 			if(inputGrid.getVoidConnectorsCoords(p, pDirections.get(0)).length != 0)
 				for(Integer[] tab : inputGrid.getVoidConnectorsCoords(p, pDirections.get(0)))
 				queue.add(tab);

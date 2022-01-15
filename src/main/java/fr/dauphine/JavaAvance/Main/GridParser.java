@@ -43,6 +43,7 @@ public class GridParser {
     public static void saveGrid(String grid, String path) throws IOException {
         if (path.equals(""))
             path = "grid.txt";
+
         File f = new File(path);
 
         RandomAccessFile stream = new RandomAccessFile(path, "rw");
@@ -50,7 +51,7 @@ public class GridParser {
         FileChannel fc = stream.getChannel();
 
         FileLock verrou = null;
-        verrou = fc.tryLock();
+        verrou = fc.tryLock(); // on verrouille le fichier pour ne pas corrompre le fichier
 
         stream.write(grid.getBytes(charset));
         verrou.release();
@@ -58,6 +59,51 @@ public class GridParser {
         stream.close();
         fc.close();
 
+    }
+
+    public static Grid convertFile(String filename) throws IOException {
+        if (filename.equals(""))
+            throw new IllegalArgumentException("Fichier non existant");
+
+        File f = new File(filename);
+
+        RandomAccessFile stream = new RandomAccessFile(filename, "rw");
+
+        FileChannel fc = stream.getChannel();
+
+        FileLock verrou = null;
+        verrou = fc.tryLock(); // on verrouille le fichier pour ne pas corrompre le fichier
+
+        Grid g = null;
+        int h, w, type, ori, lin = 0, col = 0; // height, width, PieceType, Orientation, line, column
+
+        String line;
+
+        for (int i = 0; stream.getFilePointer() < stream.length(); ++i) {
+            line = stream.readLine();
+
+            if (i == 1)
+                h = Character.getNumericValue(line.charAt(0));
+            else if (i == 2)
+                w = Character.getNumericValue(line.charAt(0));
+
+            else
+                for (int j = 0; j < line.length(); ++j) {
+                    if (line.charAt(j) == ' ')
+                        g.setPiece(lin, col, new Piece(lin, col, Character.getNumericValue(line.charAt(j - 3)),
+                                Character.getNumericValue(line.charAt(j - 1))));
+                    col++;
+                }
+            ++lin;
+            col = 0;
+        }
+
+        verrou.release();
+
+        stream.close();
+        fc.close();
+
+        return g;
     }
 
     public static void main(String[] args) {

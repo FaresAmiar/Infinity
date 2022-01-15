@@ -187,6 +187,7 @@ public class Grid {
 
 	
 	/** 
+	 * Retourne les coordonnées des cases sur lequel un connecteur vide va pointer
 	 * @param p : pièce
 	 * @param orientation : prochaine orientation choisie (connecteur)
 	 * @return Integer[][]
@@ -226,6 +227,7 @@ public class Grid {
 
 	
 	/** 
+	 * Transforme une orientation en des coordonnées à partir de i et j
 	 * @param ori
 	 * @param i
 	 * @param j
@@ -253,6 +255,7 @@ public class Grid {
 
 	
 	/** 
+	 * Retourne le type de piece possible pour les coins
 	 * @return List<PieceType>
 	 */
 	public List<PieceType> getPieceTypeCorner() {
@@ -261,6 +264,7 @@ public class Grid {
 
 	
 	/** 
+	 * Retourne la liste de piece possible pour la case i,j donnée
 	 * @param i
 	 * @param j
 	 * @return List<PieceType>
