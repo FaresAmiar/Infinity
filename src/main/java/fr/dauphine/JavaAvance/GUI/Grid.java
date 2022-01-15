@@ -42,58 +42,109 @@ public class Grid {
 		pieces = new Piece[height][width];
 	}
 
+	
+	/** 
+	 * @return int
+	 */
 	public int getWidth() {
 		return width;
 	}
 
+	
+	/** 
+	 * @param width
+	 */
 	public void setWidth(int width) {
 		this.width = width;
 	}
 
+	
+	/** 
+	 * @return int
+	 */
 	public int getHeight() {
 		return height;
 	}
 
+	
+	/** 
+	 * @param height
+	 */
 	public void setHeight(int height) {
 		this.height = height;
 	}
 
+	
+	/** 
+	 * @return Integer
+	 */
 	public Integer getNbcc() {
 		return nbcc;
 	}
 
+	
+	/** 
+	 * @param nbcc
+	 */
 	public void setNbcc(int nbcc) {
 		this.nbcc = nbcc;
 	}
 
+	
+	/** 
+	 * @param line
+	 * @param column
+	 * @return Piece
+	 */
 	public Piece getPiece(int line, int column) {
 		return this.pieces[line][column];
 	}
 
+	
+	/** 
+	 * @param line
+	 * @param column
+	 * @param piece
+	 */
 	public void setPiece(int line, int column, Piece piece) {
 		this.pieces[line][column] = piece;
 	}
 
+	
+	/** 
+	 * @return Piece[][]
+	 */
 	public Piece[][] getAllPieces() {
 		return pieces;
 	}
 
+	
+	/** 
+	 * @param p
+	 * @return List<Orientation>
+	 */
 	//f
 	public List<Orientation> getConnectorsEmpty(Piece p) {
 		List<Orientation> connEmpty = new ArrayList<Orientation>();
-		if(p.hasLeftConnector() && this.leftNeighbor(p).getType() == PieceType.VOID)
+		if(p.hasLeftConnector() && this.leftNeighbor(p) != null && this.leftNeighbor(p).getType() == PieceType.VOID)
 			connEmpty.add(Orientation.WEST);
-		if(p.hasRightConnector() && this.rightNeighbor(p).getType() == PieceType.VOID)
+		if(p.hasRightConnector() && rightNeighbor(p) != null && this.rightNeighbor(p).getType() == PieceType.VOID)
 			connEmpty.add(Orientation.EAST);
-		if(p.hasTopConnector() && this.topNeighbor(p).getType() == PieceType.VOID)
+		if(p.hasTopConnector() && topNeighbor(p) != null && this.topNeighbor(p).getType() == PieceType.VOID)
 			connEmpty.add(Orientation.NORTH);
-		if(p.hasBottomConnector() && this.bottomNeighbor(p).getType() == PieceType.VOID)
+		if(p.hasBottomConnector() && bottomNeighbor(p) != null && this.bottomNeighbor(p).getType() == PieceType.VOID)
 			connEmpty.add(Orientation.SOUTH);
 
 		return connEmpty;
 
 	}
 
+	
+	/** 
+	 * Vérifie les cases vides adjacentes d'une pièce
+	 * @param p : piece
+	 * @return List<Orientation>
+	 */
 	//f
 	public List<Orientation> getFreeAdjacentCell(Piece p) {
 		int i = p.getPosX(), j = p.getPosY();
@@ -102,59 +153,152 @@ public class Grid {
 		if(i == 0) 
 			if(j == 0) 
 				oris.addAll(0, Arrays.asList(Orientation.EAST, Orientation.SOUTH));
+			else if(j == this.getWidth() - 1)
+				oris.addAll(0, Arrays.asList(Orientation.WEST, Orientation.SOUTH));
 			else
 				oris.addAll(0, Arrays.asList(Orientation.WEST,Orientation.EAST, Orientation.SOUTH));
+		else if(i == this.getHeight() - 1)
+			if(j == 0)
+				oris.addAll(0, Arrays.asList(Orientation.NORTH, Orientation.EAST));
+			else if(j == this.getWidth() - 1)
+				oris.addAll(0, Arrays.asList(Orientation.WEST, Orientation.NORTH));
 		else
 			if(j == 0)
 				oris.addAll(0, Arrays.asList(Orientation.NORTH, Orientation.EAST, Orientation.SOUTH));
+			else if(j == this.getWidth() - 1)
+				oris.addAll(0, Arrays.asList(Orientation.EAST, Orientation.NORTH, Orientation.SOUTH));
 			else 
 				oris.addAll(0, Arrays.asList(Orientation.NORTH, Orientation.EAST, Orientation.SOUTH, Orientation.WEST));
 
-		if(this.leftNeighbor(p).getType() != PieceType.VOID && oris.contains(Orientation.WEST))
+		if(this.leftNeighbor(p) != null && this.leftNeighbor(p).getType() != PieceType.VOID || !p.hasLeftConnector())
 			oris.remove(Orientation.WEST);
 
-		if(this.rightNeighbor(p).getType() != PieceType.VOID && oris.contains(Orientation.EAST))
+		if(this.rightNeighbor(p) != null && this.rightNeighbor(p).getType() != PieceType.VOID || !p.hasRightConnector())
 			oris.remove(Orientation.EAST);
 
-		if(this.topNeighbor(p).getType() != PieceType.VOID && oris.contains(Orientation.NORTH))
+		if(this.topNeighbor(p) != null && this.topNeighbor(p).getType() != PieceType.VOID || !p.hasTopConnector())
 			oris.remove(Orientation.NORTH);
 
-		if(this.bottomNeighbor(p).getType() != PieceType.VOID && oris.contains(Orientation.SOUTH))
+		if(this.bottomNeighbor(p) != null && this.bottomNeighbor(p).getType() != PieceType.VOID || !p.hasBottomConnector())
 			oris.remove(Orientation.SOUTH);
 
 		return oris;
 	}
 
+	
+	/** 
+	 * @param p : pièce
+	 * @param orientation : prochaine orientation choisie (connecteur)
+	 * @return Integer[][]
+	 */
+	public Integer[][] getVoidConnectorsCoords(Piece p, Orientation orientation){
+		/*if(p.getType() != PieceType.TTYPE || p.getType() != PieceType.FOURCONN)
+			throw new IllegalArgumentException("The piece type must be either TTYPE or FOURCONN");*/
+		Integer[][] coords = null;
+		int i = 0;
+		
+		if(PieceType.VOID == p.getType())
+			return null;
+		
+		//Si un connecteur vide autre que celui a etendre est présent 
+		List<Orientation> connects = getConnectorsEmpty(p);
+		connects.remove(orientation);
+
+		
+
+		//Pour le FOURCONN, si on choisi un connecteur à étendre, 2 seront vides et en attente
+/*		if(p.getType() == PieceType.FOURCONN) { 
+			coords = new Integer[][2];
+		}*/
+
+		//Pour le TTYPE, si on choisi un connecteur à étendre, 1 sera vide et en attente
+		/*if(p.getType() == PieceType.TTYPE)
+			coords = new Integer[1][2];*/
+
+		coords = new Integer[connects.size()][2];
+
+		for(Orientation o : connects) {
+				coords[i++] = Arrays.stream(orientationToCoordinates(o, p.getPosX(), p.getPosY())).boxed().toArray(Integer[]::new);
+
+		}
+		return coords;
+	}
+
+	
+	/** 
+	 * @param ori
+	 * @param i
+	 * @param j
+	 * @return int[]
+	 */
+	public static int[] orientationToCoordinates(Orientation ori, int i, int j) {
+		int[] coords = new int[2];
+		switch (ori) {
+			case NORTH:
+				coords[0] = i - 1;
+				break;
+			case SOUTH:
+				coords[0] = i + 1;
+				break;
+			case EAST:
+				coords[1] = j + 1;
+				break;
+			case WEST: 
+				coords[1] = j - 1;
+		}
+
+		return coords;
+	}
 
 
-
+	
+	/** 
+	 * @return List<PieceType>
+	 */
 	public List<PieceType> getPieceTypeCorner() {
 		return new ArrayList<PieceType>(Arrays.asList(PieceType.ONECONN, PieceType.LTYPE));
 	}
 
-	public List<PieceType> piecePossible(int i, int j, LinkedList<Orientation> linkedList) {
+	
+	/** 
+	 * @param i
+	 * @param j
+	 * @return List<PieceType>
+	 */
+	public List<PieceType> piecePossible(int i, int j) {
+
+		//On crée une liste avec toutes les possibilités qu'on réduira au fil du temps
 		List<PieceType> possible = new ArrayList<PieceType>(
 			Arrays.asList(PieceType.ONECONN, PieceType.LTYPE, PieceType.BAR, PieceType.FOURCONN,
 					PieceType.TTYPE));
 
+		//Liste des piecestype avec un ordre particulier, sans le 0 (VOID)
 		LinkedList<Integer> pTypesTest = new LinkedList<Integer>(Arrays.asList(4, 3, 2, 5, 1));
+		
+		//Si on est dans un coin : seulement 2 types possibles : LTYPE et ONECONN
 		if (this.isCorner(i, j))
 			possible.removeAll(new ArrayList<>(Arrays.asList(PieceType.BAR, PieceType.FOURCONN, PieceType.TTYPE)));
-		else if(this.isBorderColumn(i, j) || this.isBorderLine(i, j))
+		
+		//En bordure, on a pas le droit a FOURCONN car un connecteur sera forcement outside
+			else if(this.isBorderColumn(i, j) || this.isBorderLine(i, j))
 			possible.remove(PieceType.FOURCONN);
+
+		//Si la piece n'est pas entourée par des voisins, on retourne directement toute la liste
+		if(numberOfNeibours(new Piece(i,j)) == 0)
+			return possible;
 		
 		Piece p, piece;
 		Orientation orientation;
-		Map<PieceType,List<Integer>> badNeighborsForPiece = new HashMap<PieceType,List<Integer>>();
-		List bdNeis = null;
+		Map<PieceType,List<Integer>> badNeighborsForPiece = new HashMap<PieceType,List<Integer>>(); //cette map va permettre pour chaque orientation de chaque type de piece de savoir le nombre voisins gênants 
+		List<Integer> bdNeis = null;
 		PieceType pt = null;
 		Set<Entry<Piece, Orientation>> neighbors;
-		Map neighs;
+		Map<Piece,Orientation> neighs;
 
 		for(Integer inte : pTypesTest){
 			for(int k = 0; k < 3; ++k) {
 				bdNeis = new ArrayList<Integer>();
-				pt = PieceType.getTypefromValue(pTypesTest.get(inte));
+				pt = PieceType.getTypefromValue((inte));
 				p = new Piece(i,j,pt, Orientation.getOrifromValue(k));
 				neighs = getNeighbourWithDirection(p);
 				neighbors = getNeighbourWithDirection(p).entrySet();
@@ -185,6 +329,7 @@ public class Grid {
 			bdNeis = entry.getValue();
 
 			Collections.sort(bdNeis);
+			//Pour chaque PieceType, on prend le minBadNeis qui va concourrir pour rester dans les minimums de la liste
 			minVoisPerType = (Integer) bdNeis.get(0);
 			minBadNeisForType.put(minVoisPerType, pt);
 			
@@ -202,6 +347,7 @@ public class Grid {
 				++k;
 				continue;
 			}
+			//Toutes les PieceType qui sont strictement supérieures au minimum sont supprimés
 			if(entry.getKey() > min) {
 				possible.remove(entry.getValue());
 			}
@@ -213,6 +359,12 @@ public class Grid {
 
 	}
 
+	
+	/** 
+	 * Trouve les connecteurs qui pointent hors de la grid
+	 * @param p : piece
+	 * @return List<Orientation>
+	 */
 	//f
 	public List<Orientation> connectorsOutSide(Piece p) {
 		List<Orientation> connectors = new ArrayList<Orientation>();
@@ -232,6 +384,13 @@ public class Grid {
 
 	}
 
+	
+	/** 
+	 * Retourne si p a un connecteur dans l'orientation o
+	 * @param p : piece
+	 * @param o : orientation
+	 * @return boolean
+	 */
 	//f
 	public boolean hasConnector(Piece p, Orientation o) {
 		if(o == Orientation.WEST && p.hasLeftConnector())
@@ -245,10 +404,17 @@ public class Grid {
 		return false;	
 	}
 
+	
+	/** 
+	 * Permet d'obtenir les voisins avec leur direction relative a p
+	 * @param p : piece
+	 * @return Map<Piece, Orientation>
+	 */
 	//f
 	public Map<Piece,Orientation> getNeighbourWithDirection(Piece p) {
 		Map<Piece, Orientation> m = new HashMap();
 
+		//Regarde pour tous les voisins leur position
 		for(Piece pp : listOfNeighbours(p)) {
 			if(p.getPosX() - pp.getPosX() > 0)
 				m.put(pp, Orientation.NORTH);
@@ -264,6 +430,11 @@ public class Grid {
 
 	}
 
+	
+	/** 
+	 * Avoir le nombre de piece totales
+	 * @return int
+	 */
 	// f
 	public int getNumPieces() {
 		return pieces.length * pieces[0].length;
@@ -481,6 +652,11 @@ public class Grid {
 		return count;
 	}
 
+	
+	/** 
+	 * Vérifie si toutes les pieces sont fixées
+	 * @return boolean
+	 */
 	//f
 	public boolean allPiecesAreFixed() {
 		for(Piece[] ligne : this.getAllPieces())
@@ -612,7 +788,7 @@ public class Grid {
 	 * @return true if a connector of a piece is connected
 	 */
 	public boolean isValidOrientation(int line, int column) {
-
+//a corriger
 		Piece tn = this.topNeighbor(this.getPiece(line, column));
 		Piece ln = this.leftNeighbor(this.getPiece(line, column));
 		Piece rn = this.rightNeighbor(this.getPiece(line, column));
@@ -629,13 +805,13 @@ public class Grid {
 				}
 				if (this.getPiece(line, column).hasTopConnector())
 					return false;
-				if (!this.getPiece(line, column).hasRightConnector() && rn != null && rn.hasLeftConnector())
+				if (!this.getPiece(line, column).hasRightConnector() && rn != null && rn.getType() != PieceType.VOID && rn.hasLeftConnector())
 					return false;
-				if (this.getPiece(line, column).hasRightConnector() && rn != null && !rn.hasLeftConnector())
+				if (this.getPiece(line, column).hasRightConnector() && rn != null && rn.getType() != PieceType.VOID && !rn.hasLeftConnector())
 					return false;
-				if (!this.getPiece(line, column).hasBottomConnector() && bn != null && bn.hasTopConnector())
+				if (!this.getPiece(line, column).hasBottomConnector() && bn != null && bn.getType() != PieceType.VOID && bn.hasTopConnector())
 					return false;
-				if (this.getPiece(line, column).hasBottomConnector() && bn != null && !bn.hasTopConnector())
+				if (this.getPiece(line, column).hasBottomConnector() && bn != null && bn.getType() != PieceType.VOID && !bn.hasTopConnector())
 					return false;
 
 			} else if (line > 0 && line < this.getHeight() - 1) {
@@ -648,13 +824,13 @@ public class Grid {
 						return false;
 				}
 
-				if (!this.getPiece(line, column).hasRightConnector() && rn != null && rn.hasLeftConnector())
+				if (!this.getPiece(line, column).hasRightConnector() && rn != null && rn.getType() != PieceType.VOID && rn.hasLeftConnector())
 					return false;
-				if (this.getPiece(line, column).hasRightConnector() && rn != null && !rn.hasLeftConnector())
+				if (this.getPiece(line, column).hasRightConnector() && rn != null && rn.getType() != PieceType.VOID && !rn.hasLeftConnector())
 					return false;
-				if (!this.getPiece(line, column).hasBottomConnector() && bn != null && bn.hasTopConnector())
+				if (!this.getPiece(line, column).hasBottomConnector() && bn != null && bn.getType() != PieceType.VOID && bn.hasTopConnector())
 					return false;
-				if (this.getPiece(line, column).hasBottomConnector() && bn != null && !bn.hasTopConnector())
+				if (this.getPiece(line, column).hasBottomConnector() && bn != null && bn.getType() != PieceType.VOID && !bn.hasTopConnector())
 					return false;
 
 			} else if (line == this.getHeight() - 1) {
@@ -667,9 +843,9 @@ public class Grid {
 				}
 				if (this.getPiece(line, column).hasBottomConnector())
 					return false;
-				if (!this.getPiece(line, column).hasRightConnector() && rn != null && rn.hasLeftConnector())
+				if (!this.getPiece(line, column).hasRightConnector() && rn != null && rn.getType() != PieceType.VOID && rn.hasLeftConnector())
 					return false;
-				if (this.getPiece(line, column).hasRightConnector() && rn != null && !rn.hasLeftConnector())
+				if (this.getPiece(line, column).hasRightConnector() && rn != null && rn.getType() != PieceType.VOID && !rn.hasLeftConnector())
 					return false;
 
 			}
@@ -694,9 +870,9 @@ public class Grid {
 	 */
 	public Piece leftNeighbor(Piece p) {
 
-		if (p.getPosX() > 0) {
-			if (this.getPiece(p.getPosY(), p.getPosX() - 1).getType() != PieceType.VOID) {
-				return this.getPiece(p.getPosY(), p.getPosX() - 1);
+		if (p.getPosY() > 0) {
+			if (this.getPiece(p.getPosX(), p.getPosY() - 1) != null) {
+				return this.getPiece(p.getPosX(), p.getPosY() - 1);
 			}
 		}
 		return null;
@@ -710,9 +886,9 @@ public class Grid {
 	 */
 	public Piece topNeighbor(Piece p) {
 
-		if (p.getPosY() > 0) {
-			if (this.getPiece(p.getPosY() - 1, p.getPosX()).getType() != PieceType.VOID) {
-				return this.getPiece(p.getPosY() - 1, p.getPosX());
+		if (p.getPosX() > 0) {
+			if (this.getPiece(p.getPosX() - 1, p.getPosY())!= null) {
+				return this.getPiece(p.getPosX() - 1, p.getPosY());
 			}
 		}
 		return null;
@@ -725,12 +901,9 @@ public class Grid {
 	 * @return the neighbor or null if no neighbor
 	 */
 	public Piece rightNeighbor(Piece p) {
-
-		if (p.getPosX() < this.getWidth() - 1) {
-			if (this.getPiece(p.getPosY(), p.getPosX() + 1).getType() != PieceType.VOID) {
-				return this.getPiece(p.getPosY(), p.getPosX() + 1);
-			}
-		}
+		if (p.getPosY() < this.getWidth() - 1) 
+			if (this.getPiece(p.getPosX(), p.getPosY() + 1) != null) 
+				return this.getPiece(p.getPosX(), p.getPosY() + 1);
 		return null;
 	}
 
@@ -742,14 +915,18 @@ public class Grid {
 	 */
 	public Piece bottomNeighbor(Piece p) {
 
-		if (p.getPosY() < this.getHeight() - 1) {
-			if (this.getPiece(p.getPosY() + 1, p.getPosX()).getType() != PieceType.VOID) {
-				return this.getPiece(p.getPosY() + 1, p.getPosX());
-			}
+		if (p.getPosX() < this.getHeight() - 1) {
+			if (this.getPiece(p.getPosX() + 1, p.getPosY()) != null) {
+				return this.getPiece(p.getPosX() + 1, p.getPosY());
+			}	
 		}
 		return null;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 
@@ -765,15 +942,27 @@ public class Grid {
 
 	
 	public void displayGrid(){
+		StringBuilder sb = new StringBuilder();
+		Piece p;
 		for(int i = 0; i<this.getHeight(); i++) {
 			System.out.println("");
 			for(int j = 0; j<this.getWidth(); j++) {
+				p = this.getPiece(i,j);
+				if(p.hasLeftConnector())
+					sb.append("L");
+				if(p.hasRightConnector())
+					sb.append("R");
+				if(p.hasTopConnector())
+					sb.append("U");
+				if(p.hasBottomConnector())
+					sb.append("D");
 					
-				System.out.print("| "+this.getPiece(i, i).getType()+" |");
+				System.out.print("| "+p.getType()+" " + sb.toString() +" |");
 				
-				
+				sb = new StringBuilder();
 			}
 		}
 		
 	}
+
 }

@@ -1,10 +1,12 @@
 package fr.dauphine.JavaAvance.Solve;
 
 import java.util.Random;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Queue;
 
 import fr.dauphine.JavaAvance.Components.Orientation;
 import fr.dauphine.JavaAvance.Components.Piece;
@@ -19,6 +21,11 @@ import fr.dauphine.JavaAvance.GUI.Grid;
 public class Generator {
 
 	private static Grid filledGrid;
+	private static Queue<Integer[]> queue;
+
+	public static void initializeQueue() {
+		queue = new ArrayDeque<>();
+	}
 
 	/**
 	 * @param output
@@ -62,6 +69,10 @@ public class Generator {
 		System.out.println("Fin de la génération de votre niveau : Bonne chance ");
 	}
 
+	
+	/** 
+	 * @param grid
+	 */
 	// implementation fares
 
 	public static void initGrid(Grid grid) {
@@ -201,71 +212,83 @@ public class Generator {
 		}
 	}
 
+	
+	/** 
+	 * @param inputGrid
+	 * @param i
+	 * @param j
+	 */
 	public static void recursiveConstruct(Grid inputGrid, int i, int j) {
-		if (i> 0 && j > 0 && inputGrid.allPiecesAreFixed())
+		//comme c'est récursif, on vérifie au début si on peut s'arrêter (toutes les pieces sont connectees)
+		if (i > 0 && j > 0 && inputGrid.allPiecesAreFixed())
 			return;
 		Piece p = new Piece(i, j);
-		boolean skip = false;
+		
 
+		List<PieceType> piecesPossibles = inputGrid.piecePossible(i, j);
+		Collections.shuffle(piecesPossibles);
+		PieceType pType = piecesPossibles.get(0);
+		p.setType(pType);
+		p.turn();
+			
+
+		inputGrid.setPiece(i, j, p);
+
+		int l = 0;	
+		//On va tourner la piece jusqu'a trouver une bonne orientation (au max 3 turn, car cycle horaire)
 		do {
-
-			if(inputGrid.numberOfNeibours(p) >= 4 || (inputGrid.numberOfNeibours(p) >= 3 && inputGrid.isCorner(i,j))) {
-				p.setType(PieceType.ONECONN);
-				skip = true;
-			}
-		
-		//Piece[][] piecesBefore = inputGrid.getAllPieces();
-		//Random rd = new Random();
-		
-			if(!skip) {
-				List<PieceType> piecesPossibles = inputGrid.piecePossible(i, j, p.getConnectors());
-				Collections.shuffle(piecesPossibles);
-				PieceType pType = piecesPossibles.get(0);
-				p.setType(pType);
-			}
-
-			inputGrid.setPiece(i, j, p);
-				
-			if(inputGrid.isValidOrientation(i, j))
+			if(l == 0)
+				inputGrid.displayGrid();
+			//if(inputGrid.connectorsOutSide(p).size() == 0){
+			if(inputGrid.isValidOrientation(p.getPosX(), p.getPosY())){
+				System.out.println("valid ori");
 				break;
+				
+			}
 			p.turn();
-		}while(true);
 
-		if(inputGrid.isTotallyConnected(p))
-			return;
+			++l;
+			if(l > 4)
+				throw new IllegalStateException("Probleme while true");
+		}
+		while(true);
+
+
 		
 		List<Orientation> pDirections = inputGrid.getFreeAdjacentCell(p);
-		Collections.shuffle(pDirections);
 
-		int[] nextDirection = orientationToCoordinates(inputGrid,(Orientation) pDirections.get(0), i, j);
-		
-		//if(inputGrid)
-		
-		recursiveConstruct(inputGrid,nextDirection[0], nextDirection[1]);
-
-
-
-	}
-
-	public static int[] orientationToCoordinates(Grid inputGrid, Orientation ori, int i, int j) {
-		int[] coords = new int[2];
-		switch (ori) {
-			case NORTH:
-				coords[0] = i - 1;
-				break;
-			case SOUTH:
-				coords[0] = i + 1;
-				break;
-			case EAST:
-				coords[1] = j + 1;
-				break;
-			case WEST: 
-				coords[1] = j - 1;
+		//Si on ne peut plus avancer, on regarde dans la queue si des pieces sont en attente de fixation
+		if(pDirections.isEmpty() && !queue.isEmpty()) {
+			Integer[] pos = queue.poll();
+			Piece next = inputGrid.getPiece(pos[0], pos[1]);
+			//on rappelle la fonction avec une ancienne piece non fixee
+			recursiveConstruct(inputGrid,next.getPosX(), next.getPosY());
 		}
 
-		return coords;
+		Collections.shuffle(pDirections);
+
+		//coordonnées de la nouvelle direction pour la prochaine case
+		int[] nextDirection = Grid.orientationToCoordinates((Orientation) pDirections.get(0), i, j);
+
+		//si la piece qui a ete ajoutée a 2 connecteurs vides ou plus, on l'ajoute a la queue d'attente
+		if(p.getType() == PieceType.FOURCONN || p.getType() == PieceType.TTYPE){
+			if(inputGrid.getVoidConnectorsCoords(p, pDirections.get(0)).length != 0)
+				for(Integer[] tab : inputGrid.getVoidConnectorsCoords(p, pDirections.get(0)))
+				queue.add(tab);
+		}
+		
+		recursiveConstruct(inputGrid,nextDirection[0], nextDirection[1]);
 	}
 
+
+	
+	/** 
+	 * @param filledGrid
+	 * @param inputGrid
+	 * @param i
+	 * @param j
+	 * @return int[]
+	 */
 	// fin implementation fares
 
 	public static int[] copyGrid(Grid filledGrid, Grid inputGrid, int i, int j) {
@@ -303,6 +326,10 @@ public class Generator {
 
 
 
+	
+	/** 
+	 * @param args[]
+	 */
 	public static void main(String args[]) {
 		Grid grid = new Grid(5, 5);
 		//generateLevel("null", grid);

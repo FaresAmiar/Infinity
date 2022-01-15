@@ -63,7 +63,11 @@ public class Main {
             if(! cmd.hasOption("o")) throw new ParseException("Missing mandatory --output argument.");
             outputFile = cmd.getOptionValue( "o" );
             
+            Grid g = new Grid(height,width);
+            Generator.initRandomGrid(g);
 
+            GUI gui = new GUI(g);
+            //while(true);
             // generate grid and store it to outputFile...
             
             //...            

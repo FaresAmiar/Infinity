@@ -13,7 +13,10 @@ public enum PieceType {
     VOID, ONECONN, BAR, TTYPE, FOURCONN, LTYPE;
     // Each Type has a number of connectors and a specific value
 
-    // f
+
+    /**
+     * return the type from int value
+     */
     public static PieceType getTypefromValue(int typeValue) {
         return typeValue == 0 ? PieceType.VOID
                 : (typeValue == 1 ? PieceType.ONECONN
@@ -23,7 +26,10 @@ public enum PieceType {
                                                 : (typeValue == 5 ? PieceType.LTYPE : null)))));
     }
 
-    // f
+
+    /**
+     * Return the number of connectors from type
+     */
     public int getNbConnectors() {
         return this == VOID ? 0
                 : (this == ONECONN ? 1
@@ -31,7 +37,11 @@ public enum PieceType {
 
     }
 
-    // f
+
+    /**
+     * Return possible orientation from type
+     * @return
+     */
     public ArrayList<Orientation> getListOfPossibleOri() {
         ArrayList<Orientation> empty = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH));
         ArrayList<Orientation> oneconn = new ArrayList<Orientation>(Arrays.asList(Orientation.NORTH, Orientation.EAST,
@@ -48,19 +58,24 @@ public enum PieceType {
                         : (this == BAR ? bar
                                 : (this == TTYPE ? ttype
                                         : (this == FOURCONN ? fourconn : (this == LTYPE ? ltype : null)))));
-
-        /*
-         * List<Orientation> ttype = Arrays.asList(Orientation.NORTH,) return this ==
-         * VOID ? empty : ( this == ONECONN ? Arrays.asList(Orientation.) )
-         */
     }
 
-    // f
+
+    /**
+     * Return orientation from orientation
+     * @param orientation
+     * @return
+     */
     public Orientation getOrientation(Orientation orientation) {
         return orientation.getOrientation();
     }
 
-    // f
+
+    /**
+     * Return the associated connector list from type and orientation
+     * @param orientation
+     * @return
+     */
     public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
         if (this == VOID)
             return new LinkedList<Orientation>(Arrays.asList(Orientation.NORTH));
