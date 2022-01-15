@@ -1,6 +1,7 @@
 package fr.dauphine.JavaAvance.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -92,45 +93,93 @@ public class GUI implements MouseListener{
 		// creating frame, labels
 		// Implementing method mouse clicked of interface MouseListener.
 		
-			GridLayout gridLayout = new GridLayout(grid.getHeight(), grid.getWidth());
-			this.frame = new JFrame();
-			this.frame.setTitle("InfinityLoop Game Farès_Rayan");
-			this.frame.setLayout(gridLayout);
-			this.frame.setSize(500, 500);
-			this.frame.addMouseListener(this);
-			
-			
-		for (int i = 0; i < grid.getHeight(); i++) {
-				for (int j = 0; j < grid.getWidth(); j++) {
-					Piece pieceClick = grid.getPiece(i, j);
-					System.out.println(pieceClick);
-					String pieceType = grid.getPiece(i, j).getType().toString();
-					Orientation pieceOrientation = grid.getPiece(i, j).getOrientation();
-					JButton btn_i = new JButton();
-					btn_i.setIcon(getImageIcon(pieceClick));
-					btn_i.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {								
-							pieceClick.turn();
-							btn_i.setIcon(getImageIcon(pieceClick));
-							System.out.println(pieceClick.getOrientation().toString());
-						}
-						
-					});
-					
-					this.frame.add(btn_i);
-
-				}
-			}
-	
+		this.frame = new JFrame("Multiple panel");
 		
+		GridLayout gridLayout = new GridLayout(grid.getHeight(), grid.getWidth());
+		JPanel infinityLoopGame_panel = new JPanel();
+		infinityLoopGame_panel.setLayout(gridLayout);
+		infinityLoopGame_panel.setBackground(Color.WHITE);
+		
+		this.frame.addMouseListener(this);
+		
+		for (int i = 0; i < grid.getHeight(); i++) {
+			for (int j = 0; j < grid.getWidth(); j++) {
+				
+				Piece pieceClick = grid.getPiece(i, j);
+				System.out.println(pieceClick);
+				String pieceType = grid.getPiece(i, j).getType().toString();
+				Orientation pieceOrientation = grid.getPiece(i, j).getOrientation();
+				JButton btn_i = new JButton();
+				btn_i.setIcon(getImageIcon(pieceClick));
+				btn_i.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {								
+						pieceClick.turn();
+						btn_i.setIcon(getImageIcon(pieceClick));
+						System.out.println(pieceClick.getOrientation().toString());
+					}
+					
+				});
+				
+				infinityLoopGame_panel.add(btn_i);
+				
 
-			this.frame.setLocationRelativeTo(null);
-			this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			this.frame.setVisible(true);
+			}
+		}		
+		
+		
+		JPanel buttonsControl_panel = new JPanel();
+		buttonsControl_panel.setBackground(Color.GRAY);
+		JButton btn_checker = new JButton("Check this grid");
+		btn_checker.addActionListener(new ActionListener() {
 			
-
-
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("clicker le bouton checker");
+				JOptionPane.showMessageDialog(buttonsControl_panel, "Vérification en cours.... ");
+			}
+		});
+		JButton btn_solver = new JButton("Solve this grid");
+		btn_solver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("clicker le bouton solver");
+				JOptionPane.showMessageDialog(buttonsControl_panel, "Résolution en cours.... ");
+				
+			}
+		});
+		JButton btn_generate = new JButton("Generate a new grid ?");
+		btn_generate.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("clicker le bouton generate");
+				Generator.initRandomGrid(grid);
+				initialize(grid);
+				
+			}
+		});
+		buttonsControl_panel.add(btn_checker);
+		buttonsControl_panel.add(btn_solver);
+		buttonsControl_panel.add(btn_generate);
+		
+		
+		
+		//Mise en place des boutons
+				
+		//Création des Panels
+		this.frame.add(infinityLoopGame_panel, BorderLayout.CENTER);
+		this.frame.add(buttonsControl_panel, BorderLayout.PAGE_END);
+		
+		
+		
+		this.frame.setSize(500, 500);
+		this.frame.setLocationRelativeTo(null);
+		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.frame.setVisible(true);
+		
+		
 
 	}
 

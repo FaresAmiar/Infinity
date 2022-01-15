@@ -64,6 +64,9 @@ public class Main {
             outputFile = cmd.getOptionValue( "o" );
             
 
+            GUI gui = new GUI(g);
+//            while(true);
+
             // generate grid and store it to outputFile...
             
             //...            
